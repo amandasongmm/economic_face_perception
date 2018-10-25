@@ -46,11 +46,13 @@ var q_age = {prompt: "What is your age?", options: ["Under 18", "18-25", "26-35"
 var q_gender = {prompt: "What is your gender?", options: ["Male","Female","Non-Binary"], required:true}
 var q_ethnicity = {prompt: "What is your ethnicity?", options: ["Asian", "Black", " Hispanic", "White",  "Other"], required:true}
 var q_education = {prompt: "What is the highest level of education you have achieved?", options: ["No schooling completed","Nursery school to 8th grade","Some high school or GED", "Associate degree", "Bachelor’s degree", "Master’s degree", "Professional degree", "Doctorate degree"], required:true}
-var q_attention = {prompt: "Attention question TBD", options: ["a","b","c"], required:true}
+var rNum = Math.floor(Math.random() * 5 + 1);
+var q_attention = {prompt: "What is the following number: " + rNum, options: ["1","2","3","4","5"], required:true}
 
 var demog_block = {
 	type: 'survey-multi-choice',
-	questions: [q_age, q_gender, q_ethnicity, q_education, q_attention]
+	questions: [q_age, q_gender, q_ethnicity, q_education, q_attention],
+	qAttNum: rNum
 }
 
 //timeline.push(demog_block);
