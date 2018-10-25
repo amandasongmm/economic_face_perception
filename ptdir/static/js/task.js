@@ -26,13 +26,25 @@ myImgs = images_list.slice(0,f);
 /*==========================================================================
  *                          PRISDIL (BASE MEASURE)
  * ========================================================================= */
-var prisdil_understanding_question = "If the other person chooses A and you choose B, what does the other person get?";
 var pd_params = [16,10,18,8]
 var prisdil_questions = ["You can see the other person’s picture, but they cannot see yours. Do you think they will:", "Would you:"];
 var prisdil_continuous_questions = ["You can see the other person’s picture, but they cannot see yours. SPECIFY QUESTION HERE:", "Would you:"];
 // definiting two different response scales that can be used.
 var prisdil_options = ["Play A", "Play B"];
 // defining groups of questions that will go together.
+
+var scale_0to10 = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+var scale_1to9 = ["1 (not at all)", "2", "3", "4", "5", "6", "7", "8", "9 (very)"]
+var scale_risk1 = scale_0to10.slice() //create a new "deep copy" (see https://stackoverflow.com/questions/7486085/copy-array-by-value)
+scale_risk1[0] = "0 (Completely unwilling to take risks)"
+scale_risk1[10] = "10 (Very willing to take risks)"
+var scale_time1 = scale_0to10.slice()
+scale_time1[0] = "0 (Completely unwilling to do so)"
+scale_time1[10] = "10 (Very willing to do so)"
+var scale_trust = scale_0to10.slice()
+scale_trust[0] = "0 (Does not describe them at all)"
+scale_trust[10] = "10 (Describes them perfectly)"
+
 function prisDil1(imgNm) {
 	var prisDil_block_alter = {
 		//type: 'face-multi-choice',
@@ -62,18 +74,6 @@ function prisDil2(imgNm) {
     	};
     timeline.push(prisDil_block_ego);
 }
-
-var scale_0to10 = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-var scale_1to9 = ["1 (not at all)", "2", "3", "4", "5", "6", "7", "8", "9 (very)"]
-var scale_risk1 = scale_0to10.slice() //create a new "deep copy" (see https://stackoverflow.com/questions/7486085/copy-array-by-value)
-scale_risk1[0] = "0 (Completely unwilling to take risks)"
-scale_risk1[10] = "10 (Very willing to take risks)"
-var scale_time1 = scale_0to10.slice()
-scale_time1[0] = "0 (Completely unwilling to do so)"
-scale_time1[10] = "10 (Very willing to do so)"
-var scale_trust = scale_0to10.slice()
-scale_trust[0] = "0 (Does not describe them at all)"
-scale_trust[10] = "10 (Describes them perfectly)"
 
 /*==========================================================================
  *                           FACE LIKERTS
@@ -176,10 +176,20 @@ var demog_block = {
 //timeline.push(demog_block);
 
 /*==========================================================================
-*                          PRISDIL (NO FACE, VERIFYING UNDERSTANDING)
+ *                          PRISDIL (NO FACE, VERIFYING UNDERSTANDING)
  * ========================================================================= */
-
-
+var prisdil_understanding_question = "If the other person chooses A and you choose B, what does the other person get?";
+var prisDil_understanding_block = {
+    type: 'face-multi-choice',
+    questions: [{
+        prompt: prisdil_understanding_question,
+        options: prisdil_options,
+        required:true, horizontal:false
+     }],
+     imgname: 'EmptyFace.jpg'
+    }
+timeline.push(prisDil_understanding_block)
+/*
 var prisDil_understanding_block = {
 	type: 'prisdil-no-face',
 	questions: [{
@@ -188,7 +198,7 @@ var prisDil_understanding_block = {
 		required: true,horizontal:false}],
 	imgname: 'EmptyFace.jpg',
 	prisdil_params: [16,10,18,8]
-}
+}*/
 
 timeline.push(prisDil_understanding_block)
 
