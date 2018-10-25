@@ -22,7 +22,125 @@ for (i = images_list.length - 1; i > 0; i -= 1) {
 }
 
 myImgs = images_list.slice(0,f);
+// Functions
+/*==========================================================================
+ *                          PRISDIL (BASE MEASURE)
+ * ========================================================================= */
+var prisdil_understanding_question = "If the other person chooses A and you choose B, what does the other person get?";
+var pd_params = [16,10,18,8]
+var prisdil_questions = ["You can see the other person’s picture, but they cannot see yours. Do you think they will:", "Would you:"];
+var prisdil_continuous_questions = ["You can see the other person’s picture, but they cannot see yours. SPECIFY QUESTION HERE:", "Would you:"];
+// definiting two different response scales that can be used.
+var prisdil_options = ["Play A", "Play B"];
+// defining groups of questions that will go together.
+function prisDil1(imgNm) {
+	var prisDil_block_alter = {
+		//type: 'face-multi-choice',
+		type: 'face-prisdil-continuous',
+		questions: [{prompt: prisdil_continuous_questions[0], options: prisdil_options, required:true,horizontal:false}],
+		imgname: imgNm,
+		prisdil_params: [16,10,18,8],
+		on_load: function() {
+    			var slider = document.getElementById("myRange");
+			var output = document.getElementById("slidervalue");
+			output.innerHTML = slider.value;
 
+			slider.oninput = function() {
+				output = document.getElementById("slidervalue");
+				output.innerHTML = this.value;
+			}
+  		}
+	};
+	timeline.push(prisDil_block_alter);
+};
+function prisDil2(imgNm) {
+    var prisDil_block_ego = {
+    		type: 'face-multi-choice',
+    		questions: [{prompt: prisdil_questions[1], options: prisdil_options, required:true,horizontal:false}],
+    		imgname: imgNm,
+    		prisdil_params: [16,10,18,8]
+    	};
+    timeline.push(prisDil_block_ego);
+}
+
+var scale_0to10 = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+var scale_1to9 = ["1 (not at all)", "2", "3", "4", "5", "6", "7", "8", "9 (very)"]
+var scale_risk1 = scale_0to10.slice() //create a new "deep copy" (see https://stackoverflow.com/questions/7486085/copy-array-by-value)
+scale_risk1[0] = "0 (Completely unwilling to take risks)"
+scale_risk1[10] = "10 (Very willing to take risks)"
+var scale_time1 = scale_0to10.slice()
+scale_time1[0] = "0 (Completely unwilling to do so)"
+scale_time1[10] = "10 (Very willing to do so)"
+var scale_trust = scale_0to10.slice()
+scale_trust[0] = "0 (Does not describe them at all)"
+scale_trust[10] = "10 (Describes them perfectly)"
+
+/*==========================================================================
+ *                           FACE LIKERTS
+ * ========================================================================= */
+//------------------------- Risk 1 -----------------------------------------
+function risk(imgNm) {
+	var likert_risk = {
+		type: 'face-likert',
+		questions: [{prompt: "How willing or unwilling do you think this person is to take risks?" , labels: scale_risk1, required: true}],
+		imgname: imgNm
+	};
+	timeline.push(likert_risk);
+}
+//------------------------- Time 1 -----------------------------------------
+function time(imgNm) {
+	var likert_time = {
+		type: 'face-likert',
+		questions: [{prompt: "How willing do you think this person is to give up something that is beneficial for them today in order to benefit more in the future?" , labels: scale_time1, required: true}],
+		imgname: imgNm
+	};
+	timeline.push(likert_time);
+}
+//------------------------- Altruism 2 -----------------------------------------
+function altruism(imgNm) {
+	var likert_altruism = {
+		type: 'face-likert',
+		questions: [{prompt: "How willing do you think this person is to give to good causes without expecting anything in return?" , labels: scale_time1, required: true}],
+		imgname: imgNm
+	};
+	timeline.push(likert_altruism);
+}
+//------------------------- Trust -----------------------------------------
+function trust(imgNm) {
+    	var likert_trust = {
+    		type: 'face-likert',
+    		questions: [{prompt: "<i>Please tell us how well you think the following statement describes this person:</i> they assume that people have only the best intentions." , labels: scale_trust, required: true}],
+    		imgname: imgNm
+    	};
+    	timeline.push(likert_trust);
+}
+//------------------- Negative Reciprocity 1 -----------------------------------
+function negRec(imgNm) {
+	var likert_negrec = {
+		type: 'face-likert',
+		questions: [{prompt: "How willing do you think this person is to punish someone who treats <b>them</b> unfairly, even if there may be costs to themselves?" , labels: scale_time1, required: true}],
+		imgname: imgNm
+	};
+	timeline.push(likert_negrec);
+}
+//------------------- Positive reciprocity 1 -----------------------------------
+function posRec(imgNm) {
+	var likert_posrec = {
+		type: 'face-likert',
+		questions: [{prompt: "<i>Please tell us how well you think the following statement describes this person:</i> when someone does them a favor they are willing to return it." , labels: scale_trust, required: true}],
+		imgname: imgNm
+	};
+	timeline.push(likert_posrec);
+}
+//------------------ De Bruin: attractiveness --------------------------------
+function attractiveness(imgNm) {
+	var likert_attractiveness = {
+		type: 'face-likert',
+		questions: [{prompt: "How attractive (i.e., appealing to the senses through beauty, form, character, etc) is this person?", labels: scale_1to9, required: true}],
+		imgname: imgNm
+	}
+	timeline.push(likert_attractiveness);
+}
 /*==========================================================================
  *                           INSTRUCTIONS
  * ========================================================================= */
@@ -60,8 +178,7 @@ var demog_block = {
 /*==========================================================================
 *                          PRISDIL (NO FACE, VERIFYING UNDERSTANDING)
  * ========================================================================= */
-var prisdil_understanding_question = "If the other person chooses A and you choose B, what does the other person get?";
-var pd_params = [16,10,18,8]
+
 
 var prisDil_understanding_block = {
 	type: 'prisdil-no-face',
@@ -69,141 +186,20 @@ var prisDil_understanding_block = {
 		prompt: prisdil_understanding_question,
 		options: ["$"+pd_params[0],"$"+pd_params[1],"$"+pd_params[2],"$"+pd_params[3]],
 		required: true,horizontal:false}],
+	imgname: 'EmptyFace.jpg',
 	prisdil_params: [16,10,18,8]
 }
 
-//timeline.push(prisDil_understanding_block)
+timeline.push(prisDil_understanding_block)
 
 for (imgIter=0; imgIter<f; imgIter++){
-	
-	myImg = myImgs[imgIter]	
-	/*==========================================================================
-	 *                          PRISDIL (BASE MEASURE)
-	 * ========================================================================= */
+	myImg = myImgs[imgIter]
+	prisDil1(myImg);
+	prisDil2(myImg);
+	risk(myImg);
 
-	// defining groups of questions that will go together.
-	var prisdil_questions = ["You can see the other person’s picture, but they cannot see yours. Do you think they will:", "Would you:"];
-	var prisdil_continuous_questions = ["You can see the other person’s picture, but they cannot see yours. SPECIFY QUESTION HERE:", "Would you:"];
-
-	// definiting two different response scales that can be used.
-	var prisdil_options = ["Play A", "Play B"];
-
-	var prisDil_block_alter = {
-		//type: 'face-multi-choice',
-		type: 'face-prisdil-continuous',
-		questions: [{prompt: prisdil_continuous_questions[0], options: prisdil_options, required:true,horizontal:false}],
-		imgname: myImg,
-		prisdil_params: [16,10,18,8],
-		on_load: function() {
-    			var slider = document.getElementById("myRange");
-			var output = document.getElementById("slidervalue");
-			output.innerHTML = slider.value;
-
-			slider.oninput = function() {
-				output = document.getElementById("slidervalue");
-				output.innerHTML = this.value;
-			}
-  		}
-	};
-
-	var prisDil_block_ego = {
-		type: 'face-multi-choice',
-		questions: [{prompt: prisdil_questions[1], options: prisdil_options, required:true,horizontal:false}],
-		imgname: myImg,
-		prisdil_params: [16,10,18,8]
-	};
-
-
-	timeline.push(prisDil_block_alter);
-	timeline.push(prisDil_block_ego);
-
-
-	/*==========================================================================
-	 *                           FACE LIKERTS
-	 * ========================================================================= */
-	var scale_0to10 = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-	var scale_1to9 = ["1 (not at all)", "2", "3", "4", "5", "6", "7", "8", "9 (very)"]
-
-	//------------------------- Risk 1 -----------------------------------------
-	var scale_risk1 = scale_0to10.slice() //create a new "deep copy" (see https://stackoverflow.com/questions/7486085/copy-array-by-value)
-	scale_risk1[0] = "0 (Completely unwilling to take risks)"
-	scale_risk1[10] = "10 (Very willing to take risks)"
-
-	var likert_risk = {
-		type: 'face-likert',
-		questions: [{prompt: "How willing or unwilling do you think this person is to take risks?" , labels: scale_risk1, required: true}],
-		imgname: myImg
-	};
-
-	timeline.push(likert_risk);
-
-	//------------------------- Time 1 -----------------------------------------
-	var scale_time1 = scale_0to10.slice()
-	scale_time1[0] = "0 (Completely unwilling to do so)"
-	scale_time1[10] = "10 (Very willing to do so)"
-
-	var likert_time = {
-		type: 'face-likert',
-		questions: [{prompt: "How willing do you think this person is to give up something that is beneficial for them today in order to benefit more in the future?" , labels: scale_time1, required: true}],
-		imgname: myImg
-	};
-
-	timeline.push(likert_time);
-
-	//------------------------- Altruism 2 -----------------------------------------
-	var likert_altruism = {
-		type: 'face-likert',
-		questions: [{prompt: "How willing do you think this person is to give to good causes without expecting anything in return?" , labels: scale_time1, required: true}],
-		imgname: myImg
-	};
-
-	timeline.push(likert_altruism);
-
-	//------------------------- Trust -----------------------------------------
-	var scale_trust = scale_0to10.slice()
-	scale_trust[0] = "0 (Does not describe them at all)"
-	scale_trust[10] = "10 (Describes them perfectly)"
-
-	var likert_trust = {
-		type: 'face-likert',
-		questions: [{prompt: "<i>Please tell us how well you think the following statement describes this person:</i> they assume that people have only the best intentions." , labels: scale_trust, required: true}],
-		imgname: myImg
-	};
-
-	timeline.push(likert_trust);
-
-	//------------------- Negative Reciprocity 1 -----------------------------------
-	var likert_negrec = {
-		type: 'face-likert',
-		questions: [{prompt: "How willing do you think this person is to punish someone who treats <b>them</b> unfairly, even if there may be costs to themselves?" , labels: scale_time1, required: true}],
-		imgname: myImg
-	};
-
-	timeline.push(likert_negrec);
-
-	//------------------- Positive reciprocity 1 -----------------------------------
-	var scale_trust = scale_0to10.slice()
-	scale_trust[0] = "0 (Does not describe them at all)"
-	scale_trust[10] = "10 (Describes them perfectly)"
-
-	var likert_posrec = {
-		type: 'face-likert',
-		questions: [{prompt: "<i>Please tell us how well you think the following statement describes this person:</i> when someone does them a favor they are willing to return it." , labels: scale_trust, required: true}],
-		imgname: myImg
-	};
-
-	timeline.push(likert_posrec);
-
-	//------------------ De Bruin: attractiveness --------------------------------
-	
-	var likert_attractiveness = {
-		type: 'face-likert',
-		questions: [{prompt: "How attractive (i.e., appealing to the senses through beauty, form, character, etc) is this person?", labels: scale_1to9, required: true}],
-		imgname: myImg
-	}
-
-	timeline.push(likert_attractiveness);
 }
+
 
 /*==========================================================================
  *                           RUN JSPSYCH
