@@ -197,7 +197,12 @@ for (imgIter=0; imgIter<f; imgIter++){
 	prisDil1(myImg);
 	prisDil2(myImg);
 	risk(myImg);
-
+    time(myImg);
+    altruism(myImg);
+    trust(myImg);
+    negRec(myImg);
+    posRec(myImg);
+    attractiveness(myImg);
 }
 
 
