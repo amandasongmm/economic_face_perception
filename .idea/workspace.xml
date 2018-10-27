@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="36f67583-57ba-475e-80a4-38daae5e2436" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptdir/static/js/jspsych/plugins/jspsych-prisdil-no-face.js" beforeDir="false" afterPath="$PROJECT_DIR$/ptdir/static/js/jspsych/plugins/jspsych-prisdil-no-face.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptdir/static/js/jspsych/plugins/jspsych-survey-multi-choice.js" beforeDir="false" afterPath="$PROJECT_DIR$/ptdir/static/js/jspsych/plugins/jspsych-survey-multi-choice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptdir/static/js/task.js" beforeDir="false" afterPath="$PROJECT_DIR$/ptdir/static/js/task.js" afterDir="false" />
-    </list>
+    <list default="true" id="36f67583-57ba-475e-80a4-38daae5e2436" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +57,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ptdir/static/js/task.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
+            <state relative-caret-position="525">
               <caret line="35" column="7" selection-start-line="35" selection-start-column="7" selection-end-line="35" selection-end-column="7" />
             </state>
           </provider>
@@ -157,8 +152,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-51" />
-    <option name="y" value="23" />
+    <option name="x" value="-180" />
+    <option name="y" value="97" />
     <option name="width" value="1126" />
     <option name="height" value="686" />
   </component>
@@ -272,7 +267,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-51" y="23" width="1126" height="686" extended-state="0" />
+    <frame x="233" y="23" width="1126" height="686" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.26845017" />
@@ -411,7 +406,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ptdir/static/js/task.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
+        <state relative-caret-position="525">
           <caret line="35" column="7" selection-start-line="35" selection-start-column="7" selection-end-line="35" selection-end-column="7" />
         </state>
       </provider>
