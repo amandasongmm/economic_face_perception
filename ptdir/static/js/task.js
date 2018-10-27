@@ -178,11 +178,16 @@ var demog_block = {
 /*==========================================================================
  *                          PRISDIL (NO FACE, VERIFYING UNDERSTANDING)
  * ========================================================================= */
-var prisdil_understanding_question = "If the other person chooses A and you choose B, what does the other person get?";
+var understanding = scale_1to9.slice();
+understanding[0] = 'I think he/she will definitely choose A';
+understanding[9] = 'I think he/she will definitely choose B';
+
+var prisdil_understanding_question = "What do you think the other person will choose?";
 var prisDil_understanding_block = {
     type: 'face-multi-choice',
     questions: [{
         prompt: prisdil_understanding_question,
+        labels: understanding,
         options: prisdil_options,
         required:true, horizontal:false
      }],
@@ -201,9 +206,34 @@ var prisDil_understanding_block = {
 }*/
 
 timeline.push(prisDil_understanding_block)
+/*
+// Randomize
+var functions = {
+    prisDil1,
+    prisDil2,
+    risk,
+    time,
+    altruism,
+    trust,
+    negRec,
+    posRec,
+    attractiveness
+}
 
+while (myImgs.length) {
+    var index = Math.floor(Math.random() * myImgs.length);
+    var myImg = myImgs[index];
+    var f = functions.slice();
+    myImgs.slice(index, 1);
+    while (f.length) {
+        var fIndex =  Math.floor(Math.random() * f.length);
+        f[fIndex](myImg);
+        f.slice(fIndex, 1);
+    }
+}*/
 for (imgIter=0; imgIter<f; imgIter++){
 	myImg = myImgs[imgIter]
+
 	prisDil1(myImg);
 	prisDil2(myImg);
 	risk(myImg);
@@ -213,6 +243,7 @@ for (imgIter=0; imgIter<f; imgIter++){
     negRec(myImg);
     posRec(myImg);
     attractiveness(myImg);
+
 }
 
 
