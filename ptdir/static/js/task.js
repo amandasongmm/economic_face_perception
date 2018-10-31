@@ -8,7 +8,8 @@ var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
 var timeline = [];
 
 /* load images and pick f of them */
-var images_list = ["0000.jpg", "0019.jpg", "0218.jpg", "0413.jpg", "0520.jpg", "0775.jpg", "0906.jpg", "0006.jpg", "0167.jpg", "0283.jpg", "0463.jpg", "0521.jpg", "0807.jpg", "1070.jpg", "0011.jpg", "0179.jpg", "0350.jpg", "0515.jpg", "0613.jpg", "0899.jpg", "1103.jpg"]
+// Got rid of '0000.jpg' since that is an image of an error
+var images_list = [ "0019.jpg", "0218.jpg", "0413.jpg", "0520.jpg", "0775.jpg", "0906.jpg", "0006.jpg", "0167.jpg", "0283.jpg", "0463.jpg", "0521.jpg", "0807.jpg", "1070.jpg", "0011.jpg", "0179.jpg", "0350.jpg", "0515.jpg", "0613.jpg", "0899.jpg", "1103.jpg"]
 var f = 2; //number of faces displayed (all questions will be asked for each face)
 
 //shuffle the images array before taking the first f images
@@ -70,7 +71,8 @@ function prisDil2(imgNm) {
     		type: 'face-multi-choice',
     		questions: [{prompt: prisdil_questions[1], options: prisdil_options, required:true,horizontal:false}],
     		imgname: imgNm,
-    		prisdil_params: [16,10,18,8]
+    		prisdil_params: [16,10,18,8],
+    		horizontal: true
     	};
     timeline.push(prisDil_block_ego);
 }
@@ -184,12 +186,13 @@ understanding[9] = 'I think he/she will definitely choose B';
 
 var prisdil_understanding_question = "What do you think the other person will choose?";
 var prisDil_understanding_block = {
-    type: 'face-multi-choice',
+    type: 'face-prisdil-scale',
     questions: [{
         prompt: prisdil_understanding_question,
         labels: understanding,
         options: prisdil_options,
-        required:true, horizontal:false
+        required:true,
+        horizontal:true
      }],
      imgname: 'EmptyFace.jpg'
     }
@@ -203,9 +206,10 @@ var prisDil_understanding_block = {
 		required: true,horizontal:false}],
 	imgname: 'EmptyFace.jpg',
 	prisdil_params: [16,10,18,8]
-}*/
+}
 
 timeline.push(prisDil_understanding_block)
+#/
 /*
 // Randomize
 var functions = {
