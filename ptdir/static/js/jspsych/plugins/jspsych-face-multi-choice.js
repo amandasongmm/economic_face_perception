@@ -102,7 +102,10 @@ jsPsych.plugins['face-multi-choice'] = (function() {
 		}
 
 
-		trial_form.innerHTML += '<div><p>Imagine that you are playing the following game with the person in the picture below: each of you chooses one of two actions, A or B, at the same time, without seeing what the other person does. Once you’ve both chosen your actions you both immediately receive a payment in dollars. The amount of the payment depends on both your actions, in the following way:</p></div>'
+		trial_form.innerHTML += '<div><p>Imagine that you are playing the following game with the person in the picture below.' +
+			' Each of you chooses one of two actions, A or B, at the same time, without seeing what the other person does. ' +
+			'Once you’ve both chosen your actions you both immediately receive a payment in dollars. ' +
+			'The amount of the payment depends on both your actions, in the following way:</p></div>'
 
 
 		//trial_form.innerHTML += '<img height="327" width="429" src="static/images/prisdil.png" id="prisdilImage" alt="prisoner dilemna description" />'

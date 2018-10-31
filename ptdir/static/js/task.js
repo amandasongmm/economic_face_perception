@@ -29,7 +29,10 @@ myImgs = images_list.slice(0,f);
 var instructions_block = {
 	type: 'instructions',
 	pages: [
-		'Welcome to the experiment. Click next to begin.'
+		'Welcome to the face reading experiment. You will play some economic games and see a number of faces. You task is to indicate your belief about the person based on the face photo.\n' +
+		'Read each question carefully and indicate your well-thought decisions.' +
+		'\nYour responses will be compared with other participants. \n' +
+		'There will be bonus and punishment depending on how close your responses are to the group average. The closer your responses are to the group average, the better. '
 		//'This is the second page of instructions.',
 		//'This is the final page.'
 	],
@@ -46,7 +49,7 @@ var q_age = {prompt: "What is your age?", options: ["Under 18", "18-25", "26-35"
 var q_gender = {prompt: "What is your gender?", options: ["Male","Female","Non-Binary"], required:true}
 var q_ethnicity = {prompt: "What is your ethnicity?", options: ["Asian", "Black", " Hispanic", "White",  "Other"], required:true}
 var q_education = {prompt: "What is the highest level of education you have achieved?", options: ["No schooling completed","Nursery school to 8th grade","Some high school or GED", "Associate degree", "Bachelor’s degree", "Master’s degree", "Professional degree", "Doctorate degree"], required:true}
-var q_attention = {prompt: "Attention question TBD", options: ["a","b","c"], required:true}
+var q_attention = {prompt: "Attention question TBD", options: ["a","b","c"], required:true}  /*todo: replace it with the random number check.*/
 
 var demog_block = {
 	type: 'survey-multi-choice',
