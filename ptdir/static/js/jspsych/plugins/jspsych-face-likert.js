@@ -128,7 +128,21 @@ jsPsych.plugins['face-likert'] = (function() {
         Object.assign(question_data, obje);
       }
 
-  };
+    // save data
+    var trial_data = {
+      "rt": response_time,
+   	  "questions": JSON.stringify(trial.questions),
+      "responses": JSON.stringify(question_data)
+    };
+
+    display_element.innerHTML = '';
+
+    // next trial
+    jsPsych.finishTrial(trial_data);
+  });
+
+  var startTime = (new Date()).getTime();
+ };
 
   return plugin;
 })();
