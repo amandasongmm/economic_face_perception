@@ -76,8 +76,9 @@ jsPsych.plugins['face-likert'] = (function() {
     if(trial.preamble !== null){
       html += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
     }
-    
-    html += '<img height="256" width="195" src="static/images/faces/'+trial.imgname+'" id="faceImage" alt="face" />'
+
+    // todo: This is the location of where the file that reads the names
+    html += '<img height="256" width="195" src="static/images/2kfaces/'+trial.imgname+'" id="faceImage" alt="face" />'
 
     html += '<form id="jspsych-survey-likert-form">';
 
