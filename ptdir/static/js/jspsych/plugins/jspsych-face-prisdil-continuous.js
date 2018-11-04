@@ -137,7 +137,7 @@ jsPsych.plugins['face-prisdil-continuous'] = (function() {
 			'  </tr>' +
 			'</table></div>';
 
-		trial_form.innerHTML += '<div style="float:right;margin-right:10%"><img height="256" width="195" src="static/images/faces/'+trial.imgname+'" id="faceImage" alt="face" /></div></div>'
+		trial_form.innerHTML += '<div style="float:right;margin-right:10%"><img height="256" width="195" src="static/images/2kfaces/'+trial.imgname+'" id="faceImage" alt="face" /></div></div>'
 		
 		// add multiple-choice questions
 		for (var i = 0; i < trial.questions.length; i++) {

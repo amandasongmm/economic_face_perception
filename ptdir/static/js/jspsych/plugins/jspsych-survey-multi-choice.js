@@ -1,4 +1,23 @@
-/**
+// empty
+risk('EmptyFace.jpg')
+
+// f number
+for (imgIter=0; imgIter<f; imgIter++){
+    myImg = myImgs[imgIter]
+    risk(myImg)
+}
+
+// random repeat
+for (imgIter=0; imgIter<n; imgIter++){
+    myImg = myImgs[Math.floor(Math.random * f)]
+    risk(myImg)
+}
+
+// fixed
+for (imgIter=0; imgIter<fixed.length; imgIter++){
+    myImg = fixed[imgIter]
+    risk(myImg)
+}/**
  * jspsych-survey-multi-choice
  * a jspsych plugin for multiple choice survey questions
  *

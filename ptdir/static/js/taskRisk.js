@@ -17,10 +17,10 @@ var images_list = ['Google_1_Paul Reno_1_oval.jpg', 'Google_1_Sara Guajardo_1_ov
 var f = 100; //number of faces displayed
 
 /* insert fixed face */
-var fixed = []
+var fixed = [];
 
 /* insert number of random repetitions*/
-var n = 0
+var n = 0;
 
 //shuffle the images array before taking the first f images
 //(source: https://www.frankmitchell.org/2015/01/fisher-yates/)
@@ -37,6 +37,7 @@ myImgs = images_list.slice(0,f);
 /*==========================================================================
  *                           INSTRUCTIONS
  * ========================================================================= */
+
 var instructions_block = {
 	type: 'instructions',
 	pages: [
@@ -59,8 +60,8 @@ var instructions_block = {
 
 var q_age = {
     prompt: "What is your age?",
-    options: ["Under 18", "18-25", "26-35", "36-45", "Over 46"], r
-    equired: true}
+    options: ["Under 18", "18-25", "26-35", "36-45", "Over 46"],
+    required: true}
 var q_gender = {
     prompt: "What is your gender?",
     options: ["Male","Female","Non-Binary"],
@@ -86,16 +87,25 @@ var q_attention = {
  	/* todo: save the value of rNum */
  }
 
- //timeline.push(demog_block);
+//timeline.push(demog_block);
 
 /*==========================================================================
  *                        COMPREHENSION CHECK
  * ========================================================================= */
 
+
+var question = "How willing or unwilling do you think this person is to take risks?";
+var comprehension_block = {
+    type: 'comprehension',
+    prompt: question
+}
+timeline.push(comprehension_block)
+
+
 /*==========================================================================
  *                           Function
  * ========================================================================= */
-var question = "How willing or unwilling do you think this person is to take risks?";
+
 var scale = ["0 (Completely unwilling to take risks)",
              "1", "2", "3", "4", "5", "6", "7", "8", "9",
              "10 (Very willing to take risks)"];
@@ -122,6 +132,7 @@ for (imgIter=0; imgIter<f; imgIter++){
     myImg = myImgs[imgIter]
     risk(myImg)
 }
+
 // random repeat
 for (imgIter=0; imgIter<n; imgIter++){
     myImg = myImgs[Math.floor(Math.random * f)]
