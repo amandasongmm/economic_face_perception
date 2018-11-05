@@ -20,7 +20,7 @@ var f = 100; //number of faces displayed
 var fixed = [];
 
 /* insert number of random repetitions*/
-var n = 0;
+var n = 10;
 
 //shuffle the images array before taking the first f images
 //(source: https://www.frankmitchell.org/2015/01/fisher-yates/)
@@ -74,17 +74,16 @@ var q_education = {
     prompt: "What is the highest level of education you have achieved?",
     options: ["No schooling completed","Nursery school to 8th grade","Some high school or GED", "Associate degree", "Bachelor’s degree", "Master’s degree", "Professional degree", "Doctorate degree"],
     required:true}
-var rNum = Math.floor(Math.random() * 5 + 1);
 var q_attention = {
-    prompt: "Attention question TBD",
+    //todo: change the prompt to actual question
+    // prompt is saved which contains the randomized values
+    prompt: "Attention question with random question" + Math.floor(Math.random() * 5 + 1),
     options: ["a","b","c"],
     required:true}
-    /*todo: replace it with the random number check.*/
 
  var demog_block = {
  	type: 'survey-multi-choice',
  	questions: [q_age, q_gender, q_ethnicity, q_education, q_attention]
- 	/* todo: save the value of rNum */
  }
 
 //timeline.push(demog_block);
@@ -93,14 +92,14 @@ var q_attention = {
  *                        COMPREHENSION CHECK
  * ========================================================================= */
 
-
+/*
 var question = "How willing or unwilling do you think this person is to take risks?";
 var comprehension_block = {
     type: 'comprehension',
     prompt: question
 }
 timeline.push(comprehension_block)
-
+*/
 
 /*==========================================================================
  *                           Function
@@ -116,16 +115,35 @@ function risk(imgNm) {
  		    prompt: question,
  		    labels: scale,
  		    required: true}],
- 		imgname: imgNm
+ 		imgname: imgNm,
+ 		isRandom: true,
  	};
  	timeline.push(likert_risk);
  }
+
+function nonRanRisk(imgNm) {
+    type: 'face-likert',
+    questions: [{
+        prompt: question,
+        labels: scale,
+        required: true}],
+     imgname: imgNm,
+}
+function repeatRisk(imgNm) {
+    type: 'face-likert',
+    questions: [{
+        prompt: question,
+        labels: scale,
+        required: true}],
+     imgname: imgNm,
+     isRepeat: false
+}
 
  /*==========================================================================
   *                          Push to Timeline
   * ========================================================================= */
 // empty
-risk('EmptyFace.jpg')
+nonRanRisk('EmptyFace.jpg')
 
 // f number
 for (imgIter=0; imgIter<f; imgIter++){
@@ -136,13 +154,13 @@ for (imgIter=0; imgIter<f; imgIter++){
 // random repeat
 for (imgIter=0; imgIter<n; imgIter++){
     myImg = myImgs[Math.floor(Math.random * f)]
-    risk(myImg)
+    repeatRisk(myImg)
 }
 
 // fixed
 for (imgIter=0; imgIter<fixed.length; imgIter++){
     myImg = fixed[imgIter]
-    risk(myImg)
+    nonRanRisk(myImg)
 }
 
 /*==========================================================================

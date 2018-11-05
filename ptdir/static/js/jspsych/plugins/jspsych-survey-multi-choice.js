@@ -1,23 +1,4 @@
-// empty
-risk('EmptyFace.jpg')
-
-// f number
-for (imgIter=0; imgIter<f; imgIter++){
-    myImg = myImgs[imgIter]
-    risk(myImg)
-}
-
-// random repeat
-for (imgIter=0; imgIter<n; imgIter++){
-    myImg = myImgs[Math.floor(Math.random * f)]
-    risk(myImg)
-}
-
-// fixed
-for (imgIter=0; imgIter<fixed.length; imgIter++){
-    myImg = fixed[imgIter]
-    risk(myImg)
-}/**
+/**
  * jspsych-survey-multi-choice
  * a jspsych plugin for multiple choice survey questions
  *
@@ -41,22 +22,23 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         pretty_name: 'Questions',
         nested: {
           prompt: {type: jsPsych.plugins.parameterType.STRING,
-                     pretty_name: 'Prompt',
-                     default: undefined,
-                     description: 'The strings that will be associated with a group of options.'},
+            pretty_name: 'Prompt',
+            default: undefined,
+            description: 'The strings that will be associated with a group of options.'},
           options: {type: jsPsych.plugins.parameterType.STRING,
-                     pretty_name: 'Options',
-                     array: true,
-                     default: undefined,
-                     description: 'Displays options for an individual question.'},
+            pretty_name: 'Options',
+            array: true,
+            default: undefined,
+            description: 'Displays options for an individual question.'},
           required: {type: jsPsych.plugins.parameterType.BOOL,
-                     pretty_name: 'Required',
-                     default: false,
-                     description: 'Subject will be required to pick an option for each question.'},
+            pretty_name: 'Required',
+            default: false,
+            description: 'Subject will be required to pick an option for each question.'},
           horizontal: {type: jsPsych.plugins.parameterType.BOOL,
-                     pretty_name: 'Horizontal',
-                     default: false,
-                     description: 'If true, then questions are centered and options are displayed horizontally.'},
+            pretty_name: 'Horizontal',
+            default: false,
+            description: 'If true, then questions are centered and options are displayed horizontally.'}
+          }
         }
       },
       preamble: {
@@ -179,7 +161,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
       var trial_data = {
         "rt": response_time,
         "questions": JSON.stringify(trial.questions),
-	"responses": JSON.stringify(question_data)
+	    "responses": JSON.stringify(question_data)
       };
       display_element.innerHTML = '';
 

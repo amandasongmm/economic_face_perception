@@ -53,7 +53,17 @@ jsPsych.plugins['face-likert'] = (function() {
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'Label of the button.'
+      },
+      isRandom: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'isRancdom',
+        default: false,
+        description: 'checks if trial type is random.'
       }
+      isRepeat: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        default: false,
+        description: 'checks if trial type is repeat.'}
     }
   }
 
@@ -129,11 +139,15 @@ jsPsych.plugins['face-likert'] = (function() {
         Object.assign(question_data, obje);
       }
 
+
       // save data
       var trial_data = {
         "rt": response_time,
-	"questions": JSON.stringify(trial.questions),
+        "imgName": trial.imgname, // added image name
+	    "questions": JSON.stringify(trial.questions),
         "responses": JSON.stringify(question_data)
+        "isRandom": trial.isRandom
+        "isRepeat": trial.isRepeat
       };
 
       display_element.innerHTML = '';
