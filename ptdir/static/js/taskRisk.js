@@ -158,7 +158,7 @@ for (imgIter=0; imgIter<f; imgIter++){
 
 // random repeat
 for (imgIter=0; imgIter<n; imgIter++){
-    myImg = myImgs[Math.floor(Math.random * f)]
+    myImg = myImgs[Math.floor(Math.random() * f)]
     repeatRisk(myImg)
 }
 
