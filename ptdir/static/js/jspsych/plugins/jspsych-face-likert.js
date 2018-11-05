@@ -59,7 +59,7 @@ jsPsych.plugins['face-likert'] = (function() {
         pretty_name: 'isRancdom',
         default: false,
         description: 'checks if trial type is random.'
-      }
+      },
       isRepeat: {
         type: jsPsych.plugins.parameterType.BOOL,
         default: false,
@@ -145,8 +145,8 @@ jsPsych.plugins['face-likert'] = (function() {
         "rt": response_time,
         "imgName": trial.imgname, // added image name
 	    "questions": JSON.stringify(trial.questions),
-        "responses": JSON.stringify(question_data)
-        "isRandom": trial.isRandom
+        "responses": JSON.stringify(question_data),
+        "isRandom": trial.isRandom,
         "isRepeat": trial.isRepeat
       };
 

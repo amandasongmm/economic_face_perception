@@ -41,18 +41,17 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
           }
         }
       },
-      preamble: {
+    preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
         default: null,
         description: 'HTML formatted string to display at the top of the page above all the questions.'
-      },
-      button_label: {
+    },
+    button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
         default:  'Continue',
         description: 'Label of the button.'
-      }
     }
   }
   plugin.trial = function(display_element, trial) {
