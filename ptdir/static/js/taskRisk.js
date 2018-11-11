@@ -92,13 +92,13 @@ timeline.push(demog_block);
  *                        COMPREHENSION CHECK
  * ========================================================================= */
 var question = "How willing or unwilling do you think this person is to take risks?";
-/*
+
 var comprehension_block = {
     type: 'comprehension',
     prompt: question
 }
 timeline.push(comprehension_block)
-*/
+
 
 /*==========================================================================
  *                           Function

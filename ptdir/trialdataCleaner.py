@@ -13,6 +13,7 @@ questions = []
 trial_index = []
 
 for e in trial.X:
+    e = e.replace('true', 'True').replace('false','False')
     d = eval(e)
 
     rt.append(d['rt'])
