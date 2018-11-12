@@ -1,5 +1,5 @@
 /*
- * Example plugin template
+ * Comprehension template
  */
 
 jsPsych.plugins["comprehension"] = (function() {
@@ -18,66 +18,43 @@ jsPsych.plugins["comprehension"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-    var cont = false;
-    // Source: https://www.w3schools.com/js/tryit.asp?filename=tryjs_validation_number
-    function validateForm() {
-      var x = document.forms["myForm"]["fname"].value;
-      var text = '';
-       if (x != trial.prompt) {
-         alert("The text you typed does not match prompt");
-         return false;
-       }// else { //make a variable true. print out you can now continue
-       //  text = 'You may now continue';
-       //  cont = true;
-    }
 
-    var html = "";
-    html += '<p>Please type out the following prompt in bold (case-sensitive, punctuation required): <b>' + trial.prompt + '</b>.</p>';
+    html = '';
+    // CSS
+    html += "<style>"
+    html += "#userInput {width: 350px;}"
+    html += "</style>"
 
-    // Form?
-    html += '<form name="myForm" onsubmit="return validateForm()" method="post">'
-    html += 'Name: <input type="text" name="fname">'
-    html += '<input type="submit" value="Submit">'
-    html += '</form>'
+    html += "<form id='comprehensionForm'>"
+    // Prompt
+    html += "<p>Please enter the following <b>bolded</b> statement into the text box below. Be sure to include the correct punctuation and case: <b>"+trial.prompt+"</b><p>"
+    // input
+    html += "<input type='text' id='userInput'>"
+    // Submit button
+    html += "<input type='submit' value='Submit'>"
+    html += "<br>"
+    html += "<p id='ErrorMsg'></p>"
+    html += "</form>"
+    display_element.innerHTML = html
 
-    html += '<input type="submit" id="jspsych-survey-likert-next" class="jspsych-survey-likert jspsych-btn" value="'+trial.button_label+'"></input>';
+    display_element.querySelector('#comprehensionForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      if (document.getElementById('userInput').value != trial.prompt) {
+        //alert('The statement you wrote does not match the bolded statement.');
+        document.getElementById('ErrorMsg').innerHTML = 'The statement you wrote does not match the bolded statement.'
+      } else {
+        //clear the display
+        display_element.innerHTML = '';
 
-        html += '</form>'
-
-        display_element.innerHTML = html;
-
-        display_element.querySelector('#jspsych-survey-likert-form').addEventListener('submit', function(e){
-          e.preventDefault();
-          // measure response time
-          var endTime = (new Date()).getTime();
-          var response_time = endTime - startTime;
-
-          // create object to hold responses
-          var question_data = {};
-          var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
-          for(var index = 0; index < matches.length; index++){
-            var id = matches[index].dataset['radioGroup'];
-            var el = display_element.querySelector('input[name="' + id + '"]:checked');
-            if (el === null) {
-              var response = "";
-            } else {
-              var response = parseInt(el.value);
-            }
-            var obje = {};
-            obje[id] = response;
-            Object.assign(question_data, obje);
-          }
-    display_element.innerHTML = html;
+        // end trial
+        jsPsych.finishTrial(trial_data);
+      }
+      })
 
     // data saving
     var trial_data = {
       parameter_name: 'parameter value'
     };
-
-    display_element.innerHTML = '';
-    // end trial
-    jsPsych.finishTrial(trial_data);
   };
-
-  return plugin;
+return plugin;
 })();

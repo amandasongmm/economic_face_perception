@@ -15,8 +15,10 @@ jsPsych.plugins['face-likert'] = (function() {
   plugin.info = {
     name: 'face-likert',
     description: '',
+    // basically the arguments
     parameters: {
       questions: {
+        // argument type
         type: jsPsych.plugins.parameterType.COMPLEX,
         array: true,
         pretty_name: 'Questions',
@@ -72,7 +74,10 @@ jsPsych.plugins['face-likert'] = (function() {
 
     var html = "";
     // inject CSS for trial
+
+    // style for the CSS
     html += '<style id="jspsych-survey-likert-css">';
+    // the .sample is a class selector
     html += ".jspsych-survey-likert-statement { display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px; }"+
       ".jspsych-survey-likert-opts { list-style:none; width:100%; margin:0; padding:0 0 35px; display:block; font-size: 14px; line-height:1.1em; }"+
       ".jspsych-survey-likert-opt-label { line-height: 1.1em; color: #444; }"+
@@ -87,7 +92,7 @@ jsPsych.plugins['face-likert'] = (function() {
       html += '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">'+trial.preamble+'</div>';
     }
 
-    // todo: This is the location of where the file that reads the names
+    // This is the location of where the file that reads the names
     html += '<img height="256" width="195" src="static/images/2kfaces/'+trial.imgname+'" id="faceImage" alt="face" />'
 
     html += '<form id="jspsych-survey-likert-form">';
