@@ -1,5 +1,5 @@
 /*
- * Example plugin template
+ * Comprehension template
  */
 
 jsPsych.plugins["comprehension"] = (function() {
@@ -10,7 +10,7 @@ jsPsych.plugins["comprehension"] = (function() {
     name: "comprehension",
     parameters: {
       prompt: {
-        type: jsPsych.plugins.parameterType.STRING, // BOOL, STRING, INT, FLOAT, FUNCTION, KEYCODE, SELECT, HTML_STRING, IMAGE, AUDIO, VIDEO, OBJECT, COMPLEX
+        type: jsPsych.plugins.parameterType.STRING,
         default: undefined,
         description: 'What to type out'
       }
@@ -18,39 +18,43 @@ jsPsych.plugins["comprehension"] = (function() {
   }
 
   plugin.trial = function(display_element, trial) {
-    var cont = false;
-    // Source: https://www.w3schools.com/js/tryit.asp?filename=tryjs_validation_number
-    function validateForm() {
-      var x = document.forms["myForm"]["fname"].value;
-      var text = '';
-       if (x != trial.prompt) {
-         alert("The text you typed does not match prompt");
-         return false;
-       }// else { //make a variable true. print out you can now continue
-       //  text = 'You may now continue';
-       //  cont = true;
-    }
 
-    var html = "";
-    html += '<p>Please type out the following prompt in bold (case-sensitive, punctuation required): <b>' + trial.prompt + '</b>.</p>';
+    html = '';
+    // CSS
+    html += "<style>"
+    html += "#userInput {width: 350px;}"
+    html += "</style>"
 
-    // Form?
-    html += '<form name="myForm" onsubmit="return validateForm()" method="post">'
-    html += 'Name: <input type="text" name="fname">'
-    html += '<input type="submit" value="Submit">'
-    html += '</form>'
+    html += "<form id='comprehensionForm'>"
+    // Prompt
+    html += "<p>Please enter the following <b>bolded</b> statement into the text box below. Be sure to include the correct punctuation and case: <b>"+trial.prompt+"</b><p>"
+    // input
+    html += "<input type='text' id='userInput'>"
+    // Submit button
+    html += "<input type='submit' value='Submit'>"
+    html += "<br>"
+    html += "<p id='ErrorMsg'></p>"
+    html += "</form>"
+    display_element.innerHTML = html
 
-    display_element.innerHTML = html;
+    display_element.querySelector('#comprehensionForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      if (document.getElementById('userInput').value != trial.prompt) {
+        //alert('The statement you wrote does not match the bolded statement.');
+        document.getElementById('ErrorMsg').innerHTML = 'The statement you wrote does not match the bolded statement.'
+      } else {
+        //clear the display
+        display_element.innerHTML = '';
+
+        // end trial
+        jsPsych.finishTrial(trial_data);
+      }
+      })
 
     // data saving
     var trial_data = {
       parameter_name: 'parameter value'
     };
-
-    display_element.innerHTML = '';
-    // end trial
-    jsPsych.finishTrial(trial_data);
   };
-
-  return plugin;
+return plugin;
 })();

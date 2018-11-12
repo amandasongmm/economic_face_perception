@@ -52,7 +52,7 @@ var instructions_block = {
 	show_clickable_nav: true
 }
 
-timeline.push(instructions_block);
+//timeline.push(instructions_block);
 
 
 /*==========================================================================
@@ -76,7 +76,6 @@ var q_education = {
     options: ["No schooling completed","Nursery school to 8th grade","Some high school or GED", "Associate degree", "Bachelor’s degree", "Master’s degree", "Professional degree", "Doctorate degree"],
     required:true}
 var q_attention = {
-    //todo: change the prompt to actual question
     // prompt is saved which contains the randomized values
     prompt: "Please select the following number: " + Math.floor(Math.random() * 5 + 1),
     options: ["1","2","3", "4", "5"],
@@ -87,19 +86,19 @@ var q_attention = {
  	questions: [q_age, q_gender, q_ethnicity, q_education, q_attention]
  }
 
-timeline.push(demog_block);
+//timeline.push(demog_block);
 
 /*==========================================================================
  *                        COMPREHENSION CHECK
  * ========================================================================= */
 var question = "How willing or unwilling do you think this person is to take risks?";
-/*
+
 var comprehension_block = {
     type: 'comprehension',
     prompt: question
 }
 timeline.push(comprehension_block)
-*/
+
 
 /*==========================================================================
  *                           Function

@@ -61,7 +61,7 @@ var random_num = Math.floor(Math.random()*4+1);
 
     var q_ethnicity = {
         prompt: 'What is your ethnicity?',
-        options: ['White', 'Hispanic or Latino', 'Black or African American', 'Asian', 'Native American or American Indian', 'Other'],
+        options: ['Caucasian', 'Hispanic or Latino', 'African', 'Asian', 'Native American', 'Other'],
         required: require_or_not};
 
     var q_education = {
@@ -168,7 +168,7 @@ var random_num = Math.floor(Math.random()*4+1);
 var prompty_que = '<p>How willing or unwilling do you think this person is to take risks? Rate from 1-9</p>';
 
 var labels = ["1 <br/>(Completely unwilling to take risks)",
-             "1", "2", "3", "4", "5", "6", "7", "8",
+             "2", "3", "4", "5", "6", "7", "8",
              "9  <br/>(Very willing to take risks)"];
 
 var empty_face_trial = {
