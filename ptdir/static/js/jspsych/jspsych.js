@@ -1894,6 +1894,8 @@ jsPsych.pluginAPI = (function() {
 
     var listener_function = function(e) {
 
+      console.log(e)
+
       var key_time;
       if (parameters.rt_method == 'date') {
         key_time = (new Date()).getTime();

@@ -1,5 +1,9 @@
 //original source: https://github.com/alexanderrich/stroop-jspsych
 
+
+
+
+
 /*==========================================================================
  *                               SETUP
  * ========================================================================= */
@@ -7,18 +11,6 @@
 var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
 var timeline = [];
 
-
-var img_lst = [
-        {imgname: 'Google_1_Paul Reno_1_oval.jpg'},
-        {imgname: 'Google_1_Sara Guajardo_1_oval.jpg'},
-        {imgname: 'Google_1_Gertrude Bayne_11_oval.jpg'},
-    ];
-
-var fixed_lst = [
-        {imgname: 'Google_1_Paul Reno_1_oval.jpg'},
-        {imgname: 'Google_1_Sara Guajardo_1_oval.jpg'},
-        {imgname: 'Google_1_Gertrude Bayne_11_oval.jpg'},
-    ];
 /*==========================================================================
  *                           INSTRUCTIONS
  * ========================================================================= */
@@ -47,6 +39,7 @@ var fixed_lst = [
 /*==========================================================================
  *                           DEMOGRAPHICS
  * ========================================================================= */
+
 var random_num = Math.floor(Math.random()*4+1);
 
     var q_attention = {
@@ -55,8 +48,7 @@ var random_num = Math.floor(Math.random()*4+1);
         required: true,
     };
 
-
-    var require_or_not = false;
+    var require_or_not = true;
     var q_age = {
         prompt: 'What is your age?',
         options: ['Under 18', '18-25', '26-35', '36-45', 'Over 46'],
@@ -131,8 +123,8 @@ var random_num = Math.floor(Math.random()*4+1);
 /*==========================================================================
      *                        Comprehension Check
      * ========================================================================= */
-    var target_question = "<p>Question: How willing or unwilling do you think this person is to <strong>take risks</strong>?</p>";
-    var bold_phrase = "take risks";
+    var target_question = "<p>How willing or unwilling do you think this person is to <strong>take risks</strong>?</p>";
+    var bold_phrase = 'How willing or unwilling do you think this person is to take risks?';
 
     var comprehension_question = {
         type: 'survey-text-req',
@@ -143,7 +135,7 @@ var random_num = Math.floor(Math.random()*4+1);
         button_label: 'Continue',
         placeholders: [bold_phrase],
         preamble: '<p>Below is the question you will see for the rest of the experiment.</p>' +
-        '<p>Enter the phrase <strong>in bold</strong> to continue.</p> ',
+        '<p>Enter the whole sentence <strong>word for word</strong> to continue.</p> ',
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q0;
             if (resp==bold_phrase) {
@@ -193,7 +185,7 @@ var empty_face_trial = {
  *                           For loop
  * ========================================================================= */
 function repeat_trial(iter) {
-    var each_chuck_img_num = 1;
+    var each_chuck_img_num = 2;
     var face_likert_trials = {
         type: 'face-likert-amanda',
         questions: [
@@ -207,12 +199,17 @@ function repeat_trial(iter) {
 
     var break_trial = {
         type: 'html-keyboard-response',
-        stimulus: '<p>Good job! Let us take a break!</p><p>When you are ready, press any key to continue. </p>',
+        stimulus: '<p>Good job! Let us take a quick break!</p>',
+        // choices: ['y', 'n'],
+        trial_duration: function(){
+            return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000,], 1)[0];
+  }
+        // prompt: '<p>Does the color match the word? (Y or N; 5s time limit)</p>'
     };
 
     var nested_timeline = {
-        timeline: [face_likert_trials],
-        // timeline: [face_likert_trials, break_trial],
+        // timeline: [face_likert_trials],
+        timeline: [face_likert_trials, break_trial],
         };
 
     timeline.push(nested_timeline)
@@ -233,15 +230,14 @@ function repeat_trial(iter) {
         }],
         timeline: fixed_lst,
         randomize_order: true,
+        data: {trial_type: 'fixed'},
     };
-
-
 
     /*==========================================================================
      *                           randomly repeat n trials in the end
      * ========================================================================= */
 
-    var repeat_n_trials = 3;
+    var repeat_n_trials = 1;
     let random_lst = img_lst.sort(() => .5-Math.random()).slice(0, repeat_n_trials);
 
     var repeat_trial_block = {
@@ -253,9 +249,8 @@ function repeat_trial(iter) {
         }],
         timeline: random_lst,
         randomize_order: true,
+        data: {trial_type: 'repeat'},
     };
-
-
 
 
 /*==========================================================================
@@ -266,7 +261,8 @@ function repeat_trial(iter) {
 // timeline.push(demographic_node);
 // timeline.push(location_questions);
 // timeline.push(comprehension_loop_node);
-timeline.push(empty_face_trial);
+// timeline.push(empty_face_trial);
+
 for (iter=0; iter<3; iter++) {repeat_trial(iter)}
 timeline.push(fixed_trials);
 timeline.push(repeat_trial_block);
@@ -274,6 +270,7 @@ timeline.push(repeat_trial_block);
 jsPsych.init({
 	display_element: 'jspsych-target',
 	timeline: timeline,
+    show_progress_bar: true,
 	// record data to psiTurk after each trial
 	on_data_update: function(data) {
 		psiturk.recordTrialData(data);
