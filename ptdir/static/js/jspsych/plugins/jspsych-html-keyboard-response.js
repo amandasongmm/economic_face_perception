@@ -103,6 +103,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
     // function to handle responses by the subject
     var after_response = function(info) {
+      console.log(info);
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
@@ -120,6 +121,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
     // start the response listener
     if (trial.choices != jsPsych.NO_KEYS) {
+      console.log(trial.choices);
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
