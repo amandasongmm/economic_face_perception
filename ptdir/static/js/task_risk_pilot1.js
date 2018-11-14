@@ -15,14 +15,14 @@
      * ========================================================================= */
 
     /* welcome message */
-    var page_1 = '<h2>Welcome to the face game!</h2> ' +
-		'<p> <strong>High quality data</strong> is crucial to us.</p>' +
-		'<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
-        '<p> The <strong>closer</strong> you are to the group average, the <strong>better</strong>.</p>';
-
-    var page_2 = '<p>In this game, you will see a number of face photos. </p> ' +
-        '<p>Your task is to indicate <strong>your belief</strong> about a person based on the face photo. </p>' +
-        '<p>Read the question carefully and make sure you understand it before proceeding.</p>';
+    var page_1 = '<h2>Welcome to the face perception experiment!</h2> ' +
+		'<p>In this experiment, you will see a number of facial images. </p> ' +
+		'<p>Your task is to indicate <strong>your belief</strong> about the person in the picture. </p>';
+	
+    var page_2 = '<p>Please read the questions carefully and make sure you understand them before proceeding.</p>' +
+		 '<p> You may take as long as you need to answer each question.</p>' +
+		 '<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
+	    	 '<p> The <strong>closer</strong> you are to the average of everyone else, the <strong>better</strong>.</p>';
 
     var page_3 = '<p>The task will take about 10-15 minutes.</p><p>Good luck and have fun!</p>';
 
