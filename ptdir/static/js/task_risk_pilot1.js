@@ -66,13 +66,13 @@
 
     var q_education = {
         prompt: 'What is the highest degree or level of school you have completed? (If you’re currently enrolled in school, please indicate the highest degree you have received?',
-        options: ['No school completed', 'Some high school or nursery school', 'College or bachelor degree',
-            'Master degree', 'Doctorate degree or professional degree'],
+        options: ['Less than a high school diploma', 'High school degree or equivalent (e.g. GED)', 'Some college, no degree',
+            'Associate degree (e.g. AA, AS)', 'Bachelor’s degree (e.g. BA, BS)', 'Professional or ppost-baccalauriate degree'],
         required: require_or_not};
 
     var demographic_block = {
         type: 'survey-multi-choice',
-        questions: [q_age, q_gender,  q_ethnicity, q_attention, q_education],
+        questions: [q_age, q_gender, q_hispanic, q_race, q_attention, q_education],
         data: {random_num: random_num},
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q3;
@@ -105,7 +105,7 @@
      * ========================================================================= */
     var state_question = 'What state do you live in?';
     var location_question = 'Which city do you live in?';
-    var zipcode_question = `What is your zipcode?';
+    var zipcode_question = 'What is your zipcode?';
 
     var location_questions = {
         type: 'survey-text-req',
@@ -115,7 +115,7 @@
         required: [true, true, true],
         button_label: 'Continue',
         placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
-        preamble: 'Please tell us where you're located...',
+        preamble: 'Please tell us where you are located...',
         show_progress_bar: true
     };
 
