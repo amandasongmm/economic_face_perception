@@ -17,7 +17,7 @@
     /* welcome message */
     var page_1 = '<h2>Welcome to the face game!</h2> ' +
 		'<p> <strong>High quality data</strong> is crucial to us.</p>' +
-		'<p> <strong>Your responses</strong> will be compared with <strong>other</strong> participants.</p>' +
+		'<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
         '<p> The <strong>closer</strong> you are to the group average, the <strong>better</strong>.</p>';
 
     var page_2 = '<p>In this game, you will see a number of face photos. </p> ' +
@@ -39,28 +39,33 @@
     var random_num = Math.floor(Math.random()*4+1);
 
     var q_attention = {
-        prompt: 'Choose the choice that match the number here: ' + random_num,
+        prompt: 'Please choose the option that match the number here: ' + random_num,
         options: ["1", "2", "3", "4"],
         required: true
     };
 
     var q_age = {
         prompt: 'What is your age?',
-        options: ['Under 18', '18-25', '26-35', '36-45', 'Over 46'],
+        options: ['Under 18', '18-25', '26-35', '36-45', '46-54'],
         required: require_or_not};
 
     var q_gender = {
         prompt: 'What is your gender?',
-        options: ['Male', 'Female', 'Non-binary'],
+        options: ['Male', 'Female', 'Other/Prefer not to say'],
         required: require_or_not};
 
-    var q_ethnicity = {
-        prompt: 'What is your ethnicity?',
-        options: ['Caucasian', 'Hispanic or Latino', 'African', 'Asian', 'Native American', 'Other'],
+    var q_hispanic = {
+	prompt: 'Are you of Hispanic, Latino, or Spanish origin?',
+	options: ['Yes', 'No'],
+	required: require_or_not};
+
+    var q_race = {
+        prompt: 'How would you describe yourself?',
+        options: ['American Indian or Alaskan Native', 'Asian', 'Black or African-American', 'Native Hawaiian or Other Pacific Islander', 'White'],
         required: require_or_not};
 
     var q_education = {
-        prompt: 'What is the highest level of education you have achieved?',
+        prompt: 'What is the highest degree or level of school you have completed? (If you’re currently enrolled in school, please indicate the highest degree you have received?',
         options: ['No school completed', 'Some high school or nursery school', 'College or bachelor degree',
             'Master degree', 'Doctorate degree or professional degree'],
         required: require_or_not};
@@ -98,18 +103,19 @@
     /*==========================================================================
      *                        Location Check
      * ========================================================================= */
-    var state_question = 'Which state do you live?';
-    var location_question = 'Which city do you live?';
+    var state_question = 'What state do you live in?';
+    var location_question = 'Which city do you live in?';
+    var zipcode_question = `What is your zipcode?';
 
     var location_questions = {
         type: 'survey-text-req',
-        questions: [state_question, location_question],
-        rows: [1, 1],
-        columns: [30, 30],
-        required: [true, true],
+        questions: [state_question, location_question, zipcode_question],
+        rows: [1, 1, 1],
+        columns: [30, 30, 30],
+        required: [true, true, true],
         button_label: 'Continue',
-        placeholders: ['e.g. CA', 'e.g. San Diego'],
-        preamble: 'A little bit more about you...',
+        placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
+        preamble: 'Please tell us where you're located...',
         show_progress_bar: true
     };
 
