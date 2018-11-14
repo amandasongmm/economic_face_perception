@@ -23,7 +23,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
         nested: {
           prompt: {type: jsPsych.plugins.parameterType.STRING,
             pretty_name: 'Prompt',
-            default: undefined,
+            default: '',
             description: 'The strings that will be associated with a group of options.'},
           options: {type: jsPsych.plugins.parameterType.STRING,
             pretty_name: 'Options',
@@ -44,7 +44,7 @@ jsPsych.plugins['survey-multi-choice'] = (function() {
     preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
-        default: null,
+        default: '',
         description: 'HTML formatted string to display at the top of the page above all the questions.'
     },
     button_label: {

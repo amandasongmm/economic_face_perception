@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/economic_face_perception.iml" filepath="$PROJECT_DIR$/.idea/economic_face_perception.iml" />
-      <module fileurl="file://$PROJECT_DIR$/economic_face_perception.iml" filepath="$PROJECT_DIR$/economic_face_perception.iml" />
     </modules>
   </component>
 </project>
