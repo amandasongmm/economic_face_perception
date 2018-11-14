@@ -1,90 +1,87 @@
+"""
+This file cleans trialData.csv
+"""
+import json
 import pandas as pd
 
-columnNames = ["Id", "#", "trial", "X"]
+# Creates the dataframe
+columnNames = ["UserId", "#", "trialId", "jsonStr"]
 trial = pd.read_csv("trialdata.csv", names=columnNames, header=None)
 
-rt = []
-trial_type = []
-responses = []
-view_history = []
-internal_node_id = []
-time_elapsed = []
-questions = []
-trial_index = []
+# set up the values we want to extract
+keys = ['rt', 'trial_type', 'view_history', 'internal_node_id', 'time_elapsed',
+        'trial_index', 'responses', 'questions', 'imgName', 'isRepeat',
+        'isRandom', 'stimulus', 'key_press']
+data = {key: [] for key in keys}
 
-for e in trial.X:
-    e = e.replace('true', 'True').replace('false','False')
-    d = eval(e)
+# Extracts the values
+for jsonStr in trial.jsonStr:
+    jsonDict = json.loads(jsonStr)
+    for key in keys:
+        try:
+            data[key].append(jsonDict[key])
+        except KeyError:
+            data[key].append(None)
 
-    rt.append(d['rt'])
-    trial_type.append(d['trial_type'])
-    internal_node_id.append(d['internal_node_id'])
-    time_elapsed.append(d['time_elapsed'])
-    trial_index.append(d['trial_index'])
+# Inserts the dictionary into the trial dataframe
+for key in keys:
+    trial[key] = data[key]
 
-    try:
-        responses.append(d['responses'])
-    except KeyError:
-        responses.append(None)
-    try:
-        view_history.append(d['view_history'])
-    except KeyError:
-        view_history.append(None)
-    try:
-        questions.append(d['questions'])
-    except KeyError:
-        questions.append(None)
+# set up the values we want to extract for the question
+qKeys = ['prompt', 'options', 'required', 'horizontal', 'labels']
+qData = {key: [] for key in qKeys}
 
-# 'X' is replaced, '#' == trial_index
-trial = trial.drop(['X', '#'], axis = 1)
+# Extraction - its a list because of the possibility of multiple prompts
+# Column
+for questions in trial.questions:
+    if questions is not None:
+        prompt = []
+        options = []
+        required = []
+        horizontal = []
+        labels = []
+        # row in the Column
+        for question in json.loads(questions):
+            try:
+                prompt.append(question[key])
+            except KeyError:
+                prompt.append(None)
 
-trial['rt'] = rt
-trial['trial_type'] = trial_type
-trial['internal_node_id'] = internal_node_id
-trial['time_elapsed'] = time_elapsed
-trial['trial_index'] = trial_index
-trial['responses'] = responses
-trial['view_history'] = view_history
-trial['questions'] = questions
+            try:
+                options.append(question[key])
+            except KeyError:
+                options.append(None)
 
-prompt = []
-labels = []
-required = []
-options = []
-horizontal = []
+            try:
+                required.append(question[key])
+            except KeyError:
+                required.append(None)
 
-# Does this work for demographics?
-for q in trial.questions:
-    if q == None:
-        prompt.append(None)
-        labels.append(None)
-        required.append(None)
-        options.append(None)
-        horizontal.append(None)
+            try:
+                horizontal.append(question[key])
+            except KeyError:
+                horizontal.append(None)
+
+            try:
+                labels.append(question[key])
+            except KeyError:
+                labels.append(None)
+
+        qData['prompt'].append(prompt)
+        qData['options'].append(options)
+        qData['required'].append(required)
+        qData['horizontal'].append(horizontal)
+        qData['labels'].append(labels)
     else:
-        d = eval(q.replace('true', 'True').replace('false', 'False'))[0]
-        prompt.append(d['prompt'])
-        required.append(d['required'])
+        for key in qKeys:
+            qData[key].append([None])
 
-        try:
-            labels.append(d['labels'])
-        except KeyError:
-            labels.append(None)
-        try:
-            options.append(d['options'])
-        except KeyError:
-            options.append(None)
-        try:
-            horizontal.append(d['horizontal'])
-        except:
-            horizontal.append(None)
+# Inserts question dictionary values into trial dataframe
+for key in qKeys:
+    trial[key] = qData[key]
 
-trial = trial.drop(['questions'], axis = 1)
+# Drop unwanted columns
+trial = trial.drop(['jsonStr', '#', 'questions'], axis=1)
 
-trial['prompt'] = prompt
-trial['required'] = required
-trial['labels'] = labels
-trial['options'] = options
-trial['horizontal'] = horizontal
-
-trial.to_csv('trialdataClean.csv')
+# Output the new file into current directory
+trial.to_csv('trialDataClean.csv')
