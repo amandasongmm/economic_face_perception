@@ -45,14 +45,14 @@ function shuffle(array) {
      * ========================================================================= */
 
     /* welcome message */
-    var page_1 = '<h2>Welcome to the face game!</h2> ' +
-		'<p> <strong>High quality data</strong> is crucial to us.</p>' +
-		'<p> <strong>Your responses</strong> will be compared with <strong>other</strong> participants.</p>' +
-        '<p> The <strong>closer</strong> you are to the group average, the <strong>better</strong>.</p>';
-
-    var page_2 = '<p>In this game, you will see a number of face photos. </p> ' +
-        '<p>Your task is to indicate <strong>your belief</strong> about a person based on the face photo. </p>' +
-        '<p>Read the question carefully and make sure you understand it before proceeding.</p>';
+    var page_1 = '<h2>Welcome to the face perception experiment!</h2> ' +
+		'<p>In this experiment, you will see a number of facial images. </p> ' +
+		'<p>Your task is to indicate <strong>your belief</strong> about the person in the picture. </p>';
+	
+    var page_2 = '<p>Please read the questions carefully and make sure you understand them before proceeding.</p>' +
+		 '<p> You may take as long as you need to answer each question.</p>' +
+		 '<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
+	    	 '<p> The <strong>closer</strong> you are to the average of everyone else, the <strong>better</strong>.</p>';
 
     var page_3 = '<p>The task will take about 10-15 minutes.</p><p>Good luck and have fun!</p>';
 
@@ -69,35 +69,41 @@ function shuffle(array) {
     var random_num = Math.floor(Math.random()*4+1);
 
     var q_attention = {
-        prompt: 'Choose the option that matches the number here: ' + random_num,
+        prompt: 'Please choose the option that match the number here: ' + random_num,
         options: ["1", "2", "3", "4"],
         required: true
     };
 
     var q_age = {
         prompt: 'What is your age?',
-        options: ['Under 18', '18-25', '26-35', '36-45', 'Over 46'],
+        options: ['Under 18', '18-25', '26-35', '36-45', '46-54'],
         required: require_or_not};
 
     var q_gender = {
         prompt: 'What is your gender?',
-        options: ['Male', 'Female', 'Non-binary'],
+        options: ['Male', 'Female', 'Other/Prefer not to say'],
         required: require_or_not};
 
-    var q_ethnicity = {
-        prompt: 'What is your ethnicity?',
-        options: ['Caucasian', 'Hispanic or Latino', 'African', 'Asian', 'Native American', 'Other'],
+    var q_hispanic = {
+	prompt: 'Are you of Hispanic, Latino, or Spanish origin?',
+	options: ['Yes', 'No'],
+	required: require_or_not};
+
+    var q_race = {
+        prompt: 'How would you describe yourself?',
+        options: ['American Indian or Alaskan Native', 'Asian', 'Black or African-American', 'Native Hawaiian or Other Pacific Islander', 'White'],
         required: require_or_not};
 
     var q_education = {
-        prompt: 'What is the highest level of education you have achieved?',
-        options: ['No school completed', 'Some high school or nursery school', 'College or bachelor degree',
-            'Master degree', 'Doctorate degree or professional degree'],
+        prompt: 'What is the highest degree or level of school you have completed? (If you’re currently enrolled in school, please indicate the highest degree you have received?',
+        options: ['Less than a high school diploma', 'High school degree or equivalent (e.g. GED)', 'Some college, no degree',
+            'Associate degree (e.g. AA, AS)', 'Bachelor’s degree (e.g. BA, BS)', 'Professional or ppost-baccalauriate degree'],
         required: require_or_not};
 
     var demographic_block = {
         type: 'survey-multi-choice',
-        questions: [q_age, q_gender,  q_ethnicity, q_attention, q_education],
+
+        questions: [q_age, q_gender, q_hispanic, q_attention, q_race,  q_education],
         preamble: "Before we start, we'd like to know something about you :)",
         data: {random_num: random_num},
         on_finish: function(data) {
@@ -129,19 +135,19 @@ function shuffle(array) {
     /*==========================================================================
      *                        Location Check
      * ========================================================================= */
-    var state_question = 'Which state do you live?';
-    var location_question = 'Which city do you live?';
-    var zip_question = "What is your area's zipcode?";
 
+    var state_question = 'What state do you live in?';
+    var location_question = 'Which city do you live in?';
+    var zipcode_question = 'What is your zipcode?';
     var location_questions = {
         type: 'survey-text-req',
-        questions: [state_question, location_question, zip_question],
+        questions: [state_question, location_question, zipcode_question],
         rows: [1, 1, 1],
         columns: [30, 30, 30],
         required: [true, true, true],
         button_label: 'Continue',
-        placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g.92122'],
-        preamble: 'A little bit more about you...',
+        placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
+        preamble: 'Please tell us where you are located...',
     };
 
     /*==========================================================================
