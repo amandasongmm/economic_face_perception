@@ -1,15 +1,20 @@
 # econ_face_ucsd
 
-## 1. Turning on the ubuntu machine on aws:
-- Use the password shared on lastpass for account remylevin@gmail.com
-- Start the only instance on there (right click > state > start)
+## 0. Make all necessary changes locally, then push to Gihub
+- Make sure you change the config.txt to make the right database name for the current experiment
+
+## 1. Turning on the ubuntu machine on aws: (https://aws.amazon.com)
+- Use the password shared on Google Drive for account face4funguru@gmail.com
+- Go to EC2 - instances, start the instance ending in "ccd" on there (right click > state > start)
 - Don't fotget to turn it off when done
 
 ## 2. Connecting to machine:
-- Download remy.pem (private key manaf and sam have)
-- ssh -i "remy.pem" ubuntu@[ip address you get from the aws page, need to make fixed at some pt)
+- Download face_eco_ubuntu.pem (private key)
+- ssh -i "face_eco_ubuntu.pem" ubuntu@[ip address you get from the aws page)
 
-## 3. Running the experiment in debug mode:
+## 3. Download latest codes from Github into the ubuntu machine on AWS
+
+## 4. Running the experiment in debug mode:
 remark: you can do this directly by running ptdir/rerunPsiturk.sh
 - you should be at /home/ubuntu (NOT in sudo mode, all of this is under the user ubuntu)
 - cd to econ_face_ucsd/ptdir/, this is the psiturk directory
@@ -18,15 +23,14 @@ remark: you can do this directly by running ptdir/rerunPsiturk.sh
 - debug -p, this will give you a url that you can access through your local browser
 - server off and exit if you want to stop the debugging
 
-## 4. Running experiment in sandbox
+## 5. Running experiment in sandbox
 remark: you can do this directly by running ptdir/runPsiturkInSandbox.sh
 
------------------------------------------------------
+## 6. Running experiment in live mode (Actual experiment on AMT)
+remark: we want to write a sh for this. ptdir/runPsiturkInSandbox.sh
 
-## Remy: text to change
-- Consent form: ptdir/templates/consent.html, line 27-...
-- Ad 1 (first thing people see if they click on HIT on MTurk): ptdir/templates/ad.html, line 79-93
-- Ad 2 (displays after people selected "Accept HIT"): line 110-114
-- Experiment params: ptdir/config.txt. Almost everything in [HIT Configuration] needs to be changed.
-- Message if person's already taken the HIT: ptdir/templates/error.html
-- Page title (appears in the top of the tab in your browser): ptdir/templates/exp.html, line 4 (inside the <title> tag)
+## 7. Download database files on server, then git push remotely
+remark: we want to write a sh for this. ptdir/runPsiturkInSandbox.sh
+
+## 8. Git pull the files into local folder. Move the trial.csv/ event.csv/ question.csv into other folders from further processing. 
+remark: we want to make it more automatic
