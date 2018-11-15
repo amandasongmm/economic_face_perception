@@ -5,6 +5,7 @@ from os.path import isfile, join
 
 mypath = '../images/2kfaces/'
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-
+print 'Test'
 with open('imgNames.txt', 'w') as f:
     f.write(str(onlyfiles))
+print 'Done'

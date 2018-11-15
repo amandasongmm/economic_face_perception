@@ -1,4 +1,4 @@
-/**
+/*
  * jspsych-survey-likert
  * a jspsych plugin for measuring items on a likert scale
  *
@@ -54,12 +54,12 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
         default:  'Continue',
         description: 'Label of the button.'
       },
-      // isRandom: {
-      //   type: jsPsych.plugins.parameterType.BOOL,
-      //   pretty_name: 'isRancdom',
-      //   default: false,
-      //   description: 'checks if trial type is random.'
-      // },
+      isRepeat: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'isRepeat',
+        default: false,
+        description: 'checks if trial type is repeat.'
+      },
       // isRepeat: {
       //   type: jsPsych.plugins.parameterType.BOOL,
       //   default: false,
@@ -88,7 +88,7 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
     }
 
     // todo: This is the location of where the file that reads the names
-    html += '<img height="256" width="195" src="static/images/2kfaces/'+trial.imgname+'" id="faceImage" alt="face" />'
+    html += '<img height="256" width="195" src="'+trial.imgname+'" id="faceImage" alt="face" />'
 
     html += '<form id="jspsych-survey-likert-form">';
 
@@ -146,7 +146,7 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
         "imgName": trial.imgname, // added image name
 	    "questions": JSON.stringify(trial.questions),
         "responses": JSON.stringify(question_data),
-        // "isRandom": trial.isRandom,
+        "isRepeat": trial.isRepeat,
         // "isRepeat": trial.isRepeat
       };
 

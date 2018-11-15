@@ -1,19 +1,17 @@
 //original source: https://github.com/alexanderrich/stroop-jspsych
 
 
+    /*==========================================================================
+     *                               SETUP
+     * ========================================================================= */
+    /* load psiturk */
+    var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
+    var timeline = [];
+    var require_or_not = true;
 
-
-
-/*==========================================================================
- *                               SETUP
- * ========================================================================= */
-/* load psiturk */
-var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
-var timeline = [];
-
-/*==========================================================================
- *                           INSTRUCTIONS
- * ========================================================================= */
+    /*==========================================================================
+     *                           INSTRUCTIONS
+     * ========================================================================= */
 
     /* welcome message */
     var page_1 = '<h2>Welcome to the face game!</h2> ' +
@@ -36,11 +34,11 @@ var timeline = [];
         show_progress_bar: true,
     };
 
-/*==========================================================================
- *                           DEMOGRAPHICS
- * ========================================================================= */
+    /*==========================================================================
+     *                           DEMOGRAPHICS
+     * ========================================================================= */
 
-var random_num = Math.floor(Math.random()*4+1);
+    var random_num = Math.floor(Math.random()*4+1);
 
     var q_attention = {
         prompt: 'Choose the choice that match the number here: ' + random_num,
@@ -48,11 +46,10 @@ var random_num = Math.floor(Math.random()*4+1);
         required: true,
     };
 
-    var require_or_not = true;
     var q_age = {
         prompt: 'What is your age?',
         options: ['Under 18', '18-25', '26-35', '36-45', 'Over 46'],
-        required: require_or_not,};
+        required: require_or_not};
 
     var q_gender = {
         prompt: 'What is your gender?',
@@ -87,7 +84,8 @@ var random_num = Math.floor(Math.random()*4+1);
                 data.sanity_check_1_continue = false;
             }
 
-        }
+        },
+        show_progress_bar: true
     };
 
     var demographic_node = {
@@ -103,7 +101,7 @@ var random_num = Math.floor(Math.random()*4+1);
         }
     };
 
-/*==========================================================================
+    /*==========================================================================
      *                        Location Check
      * ========================================================================= */
     var state_question = 'Which state do you live?';
@@ -118,9 +116,10 @@ var random_num = Math.floor(Math.random()*4+1);
         button_label: 'Continue',
         placeholders: ['e.g. CA', 'e.g. San Diego'],
         preamble: 'A little bit more about you...',
+        show_progress_bar: true
     };
 
-/*==========================================================================
+    /*==========================================================================
      *                        Comprehension Check
      * ========================================================================= */
     var target_question = "<p>How willing or unwilling do you think this person is to <strong>take risks</strong>?</p>";
@@ -179,13 +178,52 @@ var empty_face_trial = {
         required: true,
     }],
     imgname: 'empty-image-1.jpg',
+            show_progress_bar: true
 };
+
+
+/* More instruction */
+    var page_4 = "<h2>Next, you will see similar questions, but each question comes with a real person's face.</h2> " +
+        "<p>You might see the same face, try to be consistent with yourself. " +
+        "Also, more importantly, try to be close with other people's responses. </p>" +
+        "<p>These faces photos are not collected for the purpose of measuring risk-taking tendency. " +
+        "In other words, the people on the photos don't know that their faces will be evaluated by you. </p>";
+
+    var instruction_block2 = {
+        type: 'instructions',
+        pages: [page_4],
+        show_clickable_nav: true,
+        show_progress_bar: true
+    };
+
+    /*==========================================================================
+     *                           Fixed trials loop
+     * ========================================================================= */
+    var fixed_trials = {
+        type: 'face-likert-amanda',
+        questions: [
+            {prompt: prompty_que,
+                labels: labels,
+                required: true
+            }],
+        timeline: fixed_lst,
+        randomize_order: true,
+        isRepeat: true,
+        show_progress_bar: true
+    };
+
+    var break_trial_0 = {
+        type: 'html-keyboard-response',
+        stimulus: '<p>Good job! Let us take a quick break!</p>',
+        trial_duration: 1000,
+    };
+
 
 /*==========================================================================
  *                           For loop
  * ========================================================================= */
 function repeat_trial(iter) {
-    var each_chuck_img_num = 2;
+    var each_chuck_img_num = 20;
     var face_likert_trials = {
         type: 'face-likert-amanda',
         questions: [
@@ -193,8 +231,9 @@ function repeat_trial(iter) {
                 labels: labels,
                 required: true,
             }],
-        timeline: img_lst.slice(iter*each_chuck_img_num, (iter+1)*each_chuck_img_num),
+        timeline: all_lst.slice(iter*each_chuck_img_num, (iter+1)*each_chuck_img_num),
         randomize_order: true,
+        show_progress_bar: true,
     };
 
     var break_trial = {
@@ -202,70 +241,53 @@ function repeat_trial(iter) {
         stimulus: '<p>Good job! Let us take a quick break!</p>',
         // choices: ['y', 'n'],
         trial_duration: function(){
-            return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000,], 1)[0];
+            return jsPsych.randomization.sampleWithoutReplacement([500, 750, 1000, 2000], 1)[0];
   }
-        // prompt: '<p>Does the color match the word? (Y or N; 5s time limit)</p>'
     };
 
     var nested_timeline = {
-        // timeline: [face_likert_trials],
         timeline: [face_likert_trials, break_trial],
         };
 
     timeline.push(nested_timeline)
-
 }
 
-/*==========================================================================
- *                           Fixed trials
- * ========================================================================= */
-
-
-    var fixed_trials = {
-        type: 'face-likert-amanda',
-        questions: [{
-            prompt: prompty_que,
-            labels: labels,
-            required: true,
-        }],
-        timeline: fixed_lst,
-        randomize_order: true,
-        data: {trial_type: 'fixed'},
-    };
-
-    /*==========================================================================
-     *                           randomly repeat n trials in the end
-     * ========================================================================= */
-
-    var repeat_n_trials = 1;
-    let random_lst = img_lst.sort(() => .5-Math.random()).slice(0, repeat_n_trials);
-
-    var repeat_trial_block = {
-        type: 'face-likert-amanda',
-        questions: [{
-            prompt: prompty_que,
-            labels: labels,
-            required: true,
-        }],
-        timeline: random_lst,
-        randomize_order: true,
-        data: {trial_type: 'repeat'},
-    };
+    // /*==========================================================================
+    //  *                           randomly repeat n trials in the end
+    //  * ========================================================================= */
+    //
+    // var repeat_n_trials = 1;
+    // let random_lst = img_lst.sort(() => .5-Math.random()).slice(0, repeat_n_trials);
+    //
+    // var repeat_trial_block = {
+    //     type: 'face-likert-amanda',
+    //     questions: [{
+    //         prompt: prompty_que,
+    //         labels: labels,
+    //         required: true,
+    //     }],
+    //     timeline: random_lst,
+    //     randomize_order: true,
+    //     data: {trial_type: 'repeat'},
+    // };
 
 
 /*==========================================================================
  *                           RUN JSPSYCH
  * ========================================================================= */
 
-// timeline.push(instruction_block);
-// timeline.push(demographic_node);
-// timeline.push(location_questions);
-// timeline.push(comprehension_loop_node);
-// timeline.push(empty_face_trial);
-
-for (iter=0; iter<3; iter++) {repeat_trial(iter)}
+timeline.push(instruction_block);
+timeline.push(demographic_node);
+timeline.push(location_questions);
+timeline.push(comprehension_loop_node);
+timeline.push(empty_face_trial);
+timeline.push(instruction_block2);
 timeline.push(fixed_trials);
-timeline.push(repeat_trial_block);
+timeline.push(break_trial_0);
+var iter_end = 2;  // iter_end = 4
+for (iter=0; iter<iter_end; iter++) {repeat_trial(iter)}
+timeline.push(fixed_trials);
+
 
 jsPsych.init({
 	display_element: 'jspsych-target',
@@ -282,5 +304,5 @@ jsPsych.init({
 				psiturk.completeHIT();
 			}
 		});
-	},
+	}
 });
