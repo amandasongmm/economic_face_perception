@@ -21,13 +21,17 @@ function shuffle(array) {
   return array;
 }
 
+    var task_payment = 1; //
 
-    var each_chuck_img_num = 2;
-    var iter_total = 2;  // iter_end = 4
+    var each_chuck_img_num = 40;
+    var iter_total = 2;  // 2 or 4. 2 for the 40 unique trials, 4 for the 80 unique trials
     var unique_trial_num = each_chuck_img_num * iter_total;
 
     var test_lst = all_lst.slice(0, unique_trial_num);
     test_lst = shuffle(test_lst);
+    var require_or_not = true;
+
+
 
 
 
@@ -38,7 +42,7 @@ function shuffle(array) {
     /* load psiturk */
     var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
     var timeline = [];
-    var require_or_not = false;
+
 
     /*==========================================================================
      *                           INSTRUCTIONS
@@ -105,7 +109,7 @@ function shuffle(array) {
 
         questions: [q_age, q_gender, q_hispanic, q_attention, q_race,  q_education],
         preamble: "Before we start, we'd like to know something about you :)",
-        data: {random_num: random_num},
+        data: {random_num: random_num, payment: task_payment, total_unique_trials: unique_trial_num},
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q3;
 
@@ -144,7 +148,7 @@ function shuffle(array) {
         questions: [state_question, location_question, zipcode_question],
         rows: [1, 1, 1],
         columns: [30, 30, 30],
-        required: [true, true, true],
+        required: [require_or_not, require_or_not, require_or_not],
         button_label: 'Continue',
         placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
         preamble: 'Please tell us where you are located...',
@@ -161,7 +165,7 @@ function shuffle(array) {
         questions: [target_question],
         rows: [3],
         columns: [150],
-        required: [true],
+        required: [require_or_not],
         button_label: 'Continue',
         placeholders: [bold_phrase],
         preamble: '<p>Below is the question you will see for the rest of the task.</p>' +
@@ -208,7 +212,8 @@ var empty_face_trial = {
         labels: labels,
         required: true
     }],
-    imgname: '/static/images/faces/empty-image-1.jpg'
+    imgname: '/static/images/faces/empty-image-1.jpg',
+    preamble: 'This face is left empty on purpose. Just imagine this is a random person.',
 
 };
 
