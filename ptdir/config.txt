@@ -10,7 +10,7 @@ ad_group = Face Economy
 psiturk_keywords = face perception
 organization_name = University of California, San Diego
 browser_exclude_rule = MSIE, mobile, tablet
-allow_repeats = true
+allow_repeats = false
 
 [Database Parameters]
 database_url = sqlite:///test_1.db

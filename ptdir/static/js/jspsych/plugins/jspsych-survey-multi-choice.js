@@ -1,4 +1,4 @@
-/**
+/*
  * jspsych-survey-multi-choice
  * a jspsych plugin for multiple choice survey questions
  *

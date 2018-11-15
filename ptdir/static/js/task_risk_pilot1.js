@@ -1,3 +1,33 @@
+    /*==========================================================================
+     *                               Shuffle
+     * ========================================================================= */
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+
+    var each_chuck_img_num = 2;
+    var iter_total = 2;  // iter_end = 4
+    var unique_trial_num = each_chuck_img_num * iter_total;
+
+    var test_lst = all_lst.slice(0, unique_trial_num);
+    test_lst = shuffle(test_lst);
 
 
 
@@ -8,7 +38,7 @@
     /* load psiturk */
     var psiturk = new PsiTurk(uniqueId, adServerLoc, mode);
     var timeline = [];
-    var require_or_not = true;
+    var require_or_not = false;
 
     /*==========================================================================
      *                           INSTRUCTIONS
@@ -72,7 +102,9 @@
 
     var demographic_block = {
         type: 'survey-multi-choice',
-        questions: [q_age, q_gender, q_hispanic, q_race, q_attention, q_education],
+
+        questions: [q_age, q_gender, q_hispanic, q_attention, q_race,  q_education],
+        preamble: "Before we start, we'd like to know something about you :)",
         data: {random_num: random_num},
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q3;
@@ -103,10 +135,10 @@
     /*==========================================================================
      *                        Location Check
      * ========================================================================= */
+
     var state_question = 'What state do you live in?';
     var location_question = 'Which city do you live in?';
     var zipcode_question = 'What is your zipcode?';
-
     var location_questions = {
         type: 'survey-text-req',
         questions: [state_question, location_question, zipcode_question],
@@ -116,7 +148,6 @@
         button_label: 'Continue',
         placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
         preamble: 'Please tell us where you are located...',
-        show_progress_bar: true
     };
 
     /*==========================================================================
@@ -133,15 +164,15 @@
         required: [true],
         button_label: 'Continue',
         placeholders: [bold_phrase],
-        preamble: '<p>Below is the question you will see for the rest of the experiment.</p>' +
-        '<p>Enter the whole sentence <strong>word for word</strong> to continue.</p> ',
+        preamble: '<p>Below is the question you will see for the rest of the task.</p>' +
+        '<p>Enter the whole sentence <strong>word for word</strong>(including the question mark) to continue.</p> ',
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q0;
             if (resp==bold_phrase) {
                 data.comprehension_check_continue = true;
             }
             else {
-                alert('Pay attention and type in the words that are in bold.');
+                alert('Pay attention and type in the whole question word for word.');
                 data.comprehension_check_continue = false;
             }
         }
@@ -194,8 +225,9 @@ var empty_face_trial = {
 /*==========================================================================
  *                           For loop
  * ========================================================================= */
-function repeat_trial(iter) {
-    var each_chuck_img_num = 20;
+
+function repeat_trial(iter, second_round_or_not) {
+
     var face_likert_trials = {
         type: 'face-likert-amanda',
         questions: [
@@ -203,27 +235,35 @@ function repeat_trial(iter) {
                 labels: labels,
                 required: true,
             }],
-        timeline: all_lst.slice(iter*each_chuck_img_num, (iter+1)*each_chuck_img_num),
+        timeline: test_lst.slice(iter*each_chuck_img_num, (iter+1)*each_chuck_img_num),
         randomize_order: true,
-
+        isRepeat: second_round_or_not
     };
 
     var break_trial = {
         type: 'html-keyboard-response',
+        prompt: 'You have finished '+ (iter+1+second_round_or_not*iter_total) + '/' + iter_total * 2 +' of the task',
         stimulus: '<p>Good job! Let us take a quick break!</p>',
-        trial_duration: function(){
-            return jsPsych.randomization.sampleWithoutReplacement([750, 1000, 2000], 1)[0];
-  }
+        trial_duration: function () {
+            return jsPsych.randomization.sampleWithReplacement([750, 1000, 2000], 1)[0];
+        }
     };
+
 
     var nested_timeline = {
         timeline: [face_likert_trials, break_trial],
-        show_progress_bar: true
         };
 
     timeline.push(nested_timeline)
 }
 
+
+    var long_break = {
+        type: 'html-keyboard-response',
+        prompt: 'Half way there! Well done!',
+        stimulus: '<p>Enjoy a longer break :)</p>',
+        trial_duration: 2500,
+    };
 /*==========================================================================
  *                           RUN JSPSYCH
  * ========================================================================= */
@@ -234,17 +274,19 @@ timeline.push(location_questions);
 timeline.push(comprehension_loop_node);
 timeline.push(empty_face_trial);
 timeline.push(instruction_block2);
-timeline.push(fixed_trials);
-timeline.push(break_trial_0);
-var iter_end = 1;  // iter_end = 4
-for (iter=0; iter<iter_end; iter++) {repeat_trial(iter)}
-timeline.push(fixed_trials);
+
+// actual face-trails
+for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 0)}
+timeline.push(long_break);
+
+// Shuffle and then repeat
+test_lst = shuffle(test_lst);
+for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
 
 jsPsych.init({
 	display_element: 'jspsych-target',
 	timeline: timeline,
-    show_progress_bar: true,
 	// record data to psiTurk after each trial
 	on_data_update: function(data) {
 		psiturk.recordTrialData(data);
