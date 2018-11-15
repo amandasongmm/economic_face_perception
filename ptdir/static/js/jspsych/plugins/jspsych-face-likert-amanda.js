@@ -1,4 +1,4 @@
-/**
+/*
  * jspsych-survey-likert
  * a jspsych plugin for measuring items on a likert scale
  *
@@ -54,11 +54,11 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
         default:  'Continue',
         description: 'Label of the button.'
       },
-      isFixed: {
+      isRepeat: {
         type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'isRancdom',
+        pretty_name: 'isRepeat',
         default: false,
-        description: 'checks if trial type is random.'
+        description: 'checks if trial type is repeat.'
       },
       // isRepeat: {
       //   type: jsPsych.plugins.parameterType.BOOL,
@@ -146,7 +146,7 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
         "imgName": trial.imgname, // added image name
 	    "questions": JSON.stringify(trial.questions),
         "responses": JSON.stringify(question_data),
-        "isFixed": trial.isFixed,
+        "isRepeat": trial.isRepeat,
         // "isRepeat": trial.isRepeat
       };
 

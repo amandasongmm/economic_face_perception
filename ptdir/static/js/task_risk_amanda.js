@@ -208,7 +208,7 @@ var empty_face_trial = {
             }],
         timeline: fixed_lst,
         randomize_order: true,
-        isFixed: true,
+        isRepeat: true,
         show_progress_bar: true
     };
 
