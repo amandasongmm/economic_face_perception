@@ -88,7 +88,8 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
     }
 
     // todo: This is the location of where the file that reads the names
-    html += '<img height="256" width="195" src="'+trial.imgname+'" id="faceImage" alt="face" />'
+    // html += '<img height="256" width="195" src="'+trial.imgname+'" id="faceImage" alt="face" />'
+          html += '<img height="256" src="'+trial.imgname+'" id="faceImage" alt="face" />'
 
     html += '<form id="jspsych-survey-likert-form">';
 

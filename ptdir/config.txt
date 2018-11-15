@@ -13,7 +13,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///test_1.db
+database_url = sqlite:///pilot_risk.db
 table_name = turkdemo
 
 [Server Parameters]
