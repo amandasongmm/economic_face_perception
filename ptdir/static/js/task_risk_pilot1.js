@@ -21,10 +21,10 @@ function shuffle(array) {
   return array;
 }
 
-    var task_payment = 1; //
+    var task_payment = 2; //
 
-    var each_chuck_img_num = 40;
-    var iter_total = 2;  // 2 or 4. 2 for the 40 unique trials, 4 for the 80 unique trials
+    var each_chuck_img_num = 10;
+    var iter_total = 4;  // 2 or 4. 2 for the 40 unique trials, 4 for the 80 unique trials
     var unique_trial_num = each_chuck_img_num * iter_total;
 
     var test_lst = all_lst.slice(0, unique_trial_num);
