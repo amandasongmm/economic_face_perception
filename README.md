@@ -1,6 +1,6 @@
 # econ_face_ucsd
 
-## 0. Make all necessary changes locally, then push to Gihub
+## 0. Make all necessary changes locally, then push to Github
 - Make sure you change the config.txt to make the right database name for the current experiment
 
 ## 1. Turning on the ubuntu machine on aws: (https://aws.amazon.com)
