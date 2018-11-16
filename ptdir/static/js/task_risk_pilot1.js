@@ -20,7 +20,15 @@ function shuffle(array) {
 
   return array;
 }
-
+// https://stackoverflow.com/questions/16873323/javascript-sleep-wait-before-continuing/16873849
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
     var task_payment = 2; //
 
     var each_chuck_img_num = 10;
@@ -58,11 +66,16 @@ function shuffle(array) {
 		 '<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
 	    	 '<p> The <strong>closer</strong> you are to the average of everyone else, the <strong>better</strong>.</p>';
 
-    var page_3 = '<p>The task will take about 10-15 minutes.</p><p>Good luck and have fun!</p>';
+    var page_3 = '<p>The experiment takes on average 10-15 minutes to finish, you will view 80 faces in total.</p>' +
+        '<p>You will have a short break after every 10 faces. You need to finish them within 30 minutes to finish.</p>' +
+        '<p>It will automatically close after 30 minutes so if you don’t finish it in 30 minutes, you won’t get paid.';
+
+    var page_4 = '<p><b>Please study the face for at least 1 second before selecting. You will not be able to respond ' +
+        'to the question until 1 second has passed. Good Luck and have fun</b></p>';
 
     var instruction_block = {
         type: 'instructions',
-        pages: [page_1, page_2, page_3],
+        pages: [page_1, page_2, page_3, page_4],
         show_clickable_nav: true
     };
 
@@ -219,11 +232,11 @@ var empty_face_trial = {
 
 
 /* More instruction */
-    var page_4 = "<h2>Next, you will see similar questions, but each question comes with a real person's face.</h2>";
+    var page_5 = "<h2>Next, you will see similar questions, but each question comes with a real person's face.</h2>";
 
     var instruction_block2 = {
         type: 'instructions',
-        pages: [page_4],
+        pages: [page_5],
         show_clickable_nav: true
     };
 
@@ -234,6 +247,7 @@ var empty_face_trial = {
 function repeat_trial(iter, second_round_or_not) {
 
     var face_likert_trials = {
+        //on_start: sleep(5000),
         type: 'face-likert-amanda',
         questions: [
             {prompt: prompty_que,
@@ -253,7 +267,6 @@ function repeat_trial(iter, second_round_or_not) {
             return jsPsych.randomization.sampleWithReplacement([750, 1000, 2000], 1)[0];
         }
     };
-
 
     var nested_timeline = {
         timeline: [face_likert_trials, break_trial],
@@ -275,7 +288,7 @@ function repeat_trial(iter, second_round_or_not) {
  var feedback = {
     type: 'survey-text',
     questions: [
-        {prompt: 'If you have any feedback you would like to give to us, please write them here.'}
+        {prompt: 'If you have any feedback you would like to give to us, please write them here. Otherwise click continue to finish the experiment.'}
         ]
     }
 /*==========================================================================
@@ -291,13 +304,13 @@ timeline.push(instruction_block2);
 
 // actual face-trails
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 0)}
-//timeline.push(long_break);
+timeline.push(long_break);
 
 // Shuffle and then repeat
 test_lst = shuffle(test_lst);
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
-//timeline.push(feedback)
+timeline.push(feedback)
 
 jsPsych.init({
 	display_element: 'jspsych-target',

@@ -123,38 +123,44 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
       // measure response time
       var endTime = (new Date()).getTime();
       var response_time = endTime - startTime;
-
-      // create object to hold responses
-      var question_data = {};
-      var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
-      for(var index = 0; index < matches.length; index++){
-        var id = matches[index].dataset['radioGroup'];
-        var el = display_element.querySelector('input[name="' + id + '"]:checked');
-        if (el === null) {
-          var response = "";
-        } else {
-          var response = parseInt(el.value);
+      var MIN_TIME = 1000;
+      // minimum time data collection
+      if (response_time > MIN_TIME){
+        // create object to hold responses
+        var question_data = {};
+        var matches = display_element.querySelectorAll('#jspsych-survey-likert-form .jspsych-survey-likert-opts');
+        for(var index = 0; index < matches.length; index++){
+          var id = matches[index].dataset['radioGroup'];
+          var el = display_element.querySelector('input[name="' + id + '"]:checked');
+          if (el === null) {
+            var response = "";
+          } else {
+            var response = parseInt(el.value);
+          }
+          var obje = {};
+          obje[id] = response;
+          Object.assign(question_data, obje);
         }
-        var obje = {};
-        obje[id] = response;
-        Object.assign(question_data, obje);
+      } else {
+        alert('You need to look at the image for at least one second before you are able to go to the next face')
       }
+      // minimum time
+      if (response_time > MIN_TIME) {
+        // save data
+        var trial_data = {
+          "rt": response_time,
+          "imgName": trial.imgname, // added image name
+	      "questions": JSON.stringify(trial.questions),
+          "responses": JSON.stringify(question_data),
+          "isRepeat": trial.isRepeat,
+          // "isRepeat": trial.isRepeat
+        };
 
+        display_element.innerHTML = '';
 
-      // save data
-      var trial_data = {
-        "rt": response_time,
-        "imgName": trial.imgname, // added image name
-	    "questions": JSON.stringify(trial.questions),
-        "responses": JSON.stringify(question_data),
-        "isRepeat": trial.isRepeat,
-        // "isRepeat": trial.isRepeat
-      };
-
-      display_element.innerHTML = '';
-
-      // next trial
-      jsPsych.finishTrial(trial_data);
+        // next trial
+        jsPsych.finishTrial(trial_data);
+      }
     });
 
     var startTime = (new Date()).getTime();
