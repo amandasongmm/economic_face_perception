@@ -270,6 +270,15 @@ function repeat_trial(iter, second_round_or_not) {
         trial_duration: 2500,
     };
 /*==========================================================================
+ *                           FEEDBACK
+ * ========================================================================= */
+ var feedback = {
+    type: 'survey-text',
+    questions: [
+        {prompt: 'If you have any feedback you would like to give to us, please write them here.'}
+        ]
+    }
+/*==========================================================================
  *                           RUN JSPSYCH
  * ========================================================================= */
 
@@ -282,12 +291,13 @@ timeline.push(instruction_block2);
 
 // actual face-trails
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 0)}
-timeline.push(long_break);
+//timeline.push(long_break);
 
 // Shuffle and then repeat
 test_lst = shuffle(test_lst);
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
+//timeline.push(feedback)
 
 jsPsych.init({
 	display_element: 'jspsych-target',
