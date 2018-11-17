@@ -6,7 +6,7 @@ import pandas as pd
 
 # Creates the dataframe
 columnNames = ["UserId", "#", "trialId", "jsonStr"]
-trial = pd.read_csv("trialdata.csv", names=columnNames, header=None)
+trial = pd.read_csv("../ptdir/trialdata.csv", names=columnNames, header=None)
 
 # set up the values we want to extract
 keys = ['rt', 'trial_type', 'view_history', 'internal_node_id', 'time_elapsed',
@@ -84,4 +84,4 @@ for key in qKeys:
 trial = trial.drop(['jsonStr', '#', 'questions'], axis=1)
 
 # Output the new file into current directory
-trial.to_csv('trialDataClean.csv')
+trial.to_csv('second_pilot_DataClean.csv')
