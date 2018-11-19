@@ -93,7 +93,7 @@ function sleep(milliseconds) {
 
     var q_age = {
         prompt: 'What is your age?',
-        options: ['Under 18', '18-25', '26-35', '36-45', '46-54'],
+        options: ['Under 18', '18-25', '26-35', '36-45', '46-54', '55+'],
         required: require_or_not};
 
     var q_gender = {
