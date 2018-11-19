@@ -114,7 +114,7 @@ function sleep(milliseconds) {
     var q_education = {
         prompt: 'What is the highest degree or level of school you have completed? (If you’re currently enrolled in school, please indicate the highest degree you have received?',
         options: ['Less than a high school diploma', 'High school degree or equivalent (e.g. GED)', 'Some college, no degree',
-            'Associate degree (e.g. AA, AS)', 'Bachelor’s degree (e.g. BA, BS)', 'Professional or ppost-baccalauriate degree'],
+            'Associate degree (e.g. AA, AS)', 'Bachelor’s degree (e.g. BA, BS)', 'Professional or post-baccalauriate degree'],
         required: require_or_not};
 
     var demographic_block = {
