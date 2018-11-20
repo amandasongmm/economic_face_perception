@@ -196,6 +196,11 @@ drop responses
 egen target = group(imgname)
 egen perceiver = group(userid)
 
+replace isrepeat = "0" if isrepeat == "False"
+replace isrepeat = "1" if isrepeat == "True"
+destring isrepeat, replace
+
+
 
 
 

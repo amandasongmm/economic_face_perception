@@ -20,6 +20,7 @@ function shuffle(array) {
 
   return array;
 }
+
 // https://stackoverflow.com/questions/16873323/javascript-sleep-wait-before-continuing/16873849
 function sleep(milliseconds) {
   var start = new Date().getTime();
@@ -30,17 +31,18 @@ function sleep(milliseconds) {
   }
 }
 
-var debug_mode = 1; // 1 - debug. 0 - actual live experiment.
-var task_payment = 2; //
+    var debug_mode = 0; // 1 - debug. 0 - actual live experiment.
+    var task_payment = 2; //
     var task_version = 2; // create a mapping and specify the detailed operations and changes in each version.
     var task_name = 'take-risk';
-    var each_chuck_img_num = 10;
+    var each_chuck_img_num = 10; // 10
+    var require_or_not = true;
     var iter_total = 4;  // 2 or 4. 2 for the 40 unique trials, 4 for the 80 unique trials
     var unique_trial_num = each_chuck_img_num * iter_total;
 
     var test_lst = all_lst.slice(0, unique_trial_num);
     test_lst = shuffle(test_lst);
-    var require_or_not = true;
+
 
 
 
@@ -69,12 +71,12 @@ var task_payment = 2; //
 		 '<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
 	    	 '<p> The <strong>closer</strong> you are to the average of everyone else, the <strong>better</strong>.</p>';
 
-    var page_3 = '<p>The experiment takes on average 10-15 minutes to finish, you will view 80 faces in total.</p>' +
-        '<p>You will have a short break after every 10 faces. You need to finish them within 30 minutes to finish.</p>' +
-        '<p>It will automatically close after 30 minutes so if you don’t finish it in 30 minutes, you won’t get paid.';
+    var page_3 = '<p>The experiment takes on average <strong>10-15</strong> minutes to finish, you will view 80 faces in total.</p>' +
+        '<p>You will have a short break after every 10 faces. You need to finish them <strong>within 30</strong> minutes.</p>' +
+        '<p>It will automatically close after 30 minutes so if you don’t finish it within time, you won’t get paid.';
 
     var page_4 = '<p><b>Please study the face for at least 1 second before selecting. You will not be able to respond ' +
-        'to the question until 1 second has passed. Good Luck and have fun</b></p>';
+        'to the question until 1 second has passed.</b> <p>Good Luck and have fun!</p>';
 
     var instruction_block = {
         type: 'instructions',
