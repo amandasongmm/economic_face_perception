@@ -29,8 +29,11 @@ function sleep(milliseconds) {
     }
   }
 }
-    var task_payment = 2; //
 
+var debug_mode = 1; // 1 - debug. 0 - actual live experiment.
+var task_payment = 2; //
+    var task_version = 2; // create a mapping and specify the detailed operations and changes in each version.
+    var task_name = 'take-risk';
     var each_chuck_img_num = 10;
     var iter_total = 4;  // 2 or 4. 2 for the 40 unique trials, 4 for the 80 unique trials
     var unique_trial_num = each_chuck_img_num * iter_total;
@@ -122,7 +125,11 @@ function sleep(milliseconds) {
 
         questions: [q_age, q_gender, q_hispanic, q_attention, q_race,  q_education],
         preamble: "Before we start, we'd like to know something about you :)",
-        data: {random_num: random_num, payment: task_payment, total_unique_trials: unique_trial_num},
+        data: {random_num: random_num, payment: task_payment, total_unique_trials: unique_trial_num,
+            task_version: task_version, task_name: task_name, debug_mode: debug_mode,
+        },
+        //     var task_version = 2; // it has a mapping
+        //     var task_name = 'take-risk';
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q3;
 
@@ -218,21 +225,28 @@ var labels = ["1 <br/>(Completely unwilling to take risks)",
              "2", "3", "4", "5", "6", "7", "8",
              "9  <br/>(Very willing to take risks)"];
 
-var empty_face_trial = {
-    type: 'face-likert-amanda',
-    questions: [{
-        prompt: prompty_que,
-        labels: labels,
-        required: true
-    }],
-    imgname: '/static/images/faces/empty-image-1.jpg',
-    preamble: 'This face is left empty on purpose. Just imagine this is a random person.',
 
-};
+function empty_face(second_round_or_not) {
 
+    var empty_face_trial = {
+        type: 'face-likert-amanda',
+        questions: [{
+            prompt: prompty_que,
+            labels: labels,
+            required: true
+        }],
+        imgname: '/static/images/faces/empty-image-1.jpg',
+        preamble: 'This face is left empty on purpose. Just imagine this is a random person.',
+        isRepeat: second_round_or_not
+
+    };
+
+    timeline.push(empty_face_trial);
+
+}
 
 /* More instruction */
-    var page_5 = "<h2>Next, you will see similar questions, but each question comes with a real person's face.</h2>";
+    var page_5 = "<h2>Next, you will see similar questions, but with real people's faces.</h2>";
 
     var instruction_block2 = {
         type: 'instructions',
@@ -288,7 +302,9 @@ function repeat_trial(iter, second_round_or_not) {
  var feedback = {
     type: 'survey-text',
     questions: [
-        {prompt: 'If you have any feedback you would like to give to us, please write them here. Otherwise click continue to finish the experiment.'}
+        {prompt: 'If you have any feedback you would like to give to us, please write them here. Any kind of comments are welcome. ' +
+            'Is the task interesting, confusing, boring, etc? How do you like it? ' +
+            'Otherwise click continue to finish the experiment.'}
         ]
     }
 /*==========================================================================
@@ -299,7 +315,10 @@ timeline.push(instruction_block);
 timeline.push(demographic_node);
 timeline.push(location_questions);
 timeline.push(comprehension_loop_node);
-timeline.push(empty_face_trial);
+
+// timeline.push(empty_face_trial);
+    empty_face(0);
+
 timeline.push(instruction_block2);
 
 // actual face-trails
@@ -307,6 +326,7 @@ for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 0)}
 timeline.push(long_break);
 
 // Shuffle and then repeat
+    empty_face(1);
 test_lst = shuffle(test_lst);
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
