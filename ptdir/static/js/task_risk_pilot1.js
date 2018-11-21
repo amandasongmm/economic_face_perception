@@ -179,7 +179,8 @@ function sleep(milliseconds) {
     /*==========================================================================
      *                        Comprehension Check
      * ========================================================================= */
-    var target_question = "<p>How willing or unwilling do you think this person is to <strong>take risks</strong>?</p>";
+    var target_question = "<p><font color='red'>How willing or unwilling do you think this person is to " +
+        "<strong>take risks</strong>?</font></p>";
     var bold_phrase = 'How willing or unwilling do you think this person is to take risks?';
 
     var comprehension_question = {
@@ -191,7 +192,7 @@ function sleep(milliseconds) {
         button_label: 'Continue',
         placeholders: [bold_phrase],
         preamble: '<p>Below is the question you will see for the rest of the task.</p>' +
-        '<p>Enter the whole sentence <strong>word for word</strong>(including the question mark) to continue.</p> ',
+        '<p>Enter the whole sentence in red <strong>word for word</strong>(including the question mark) to continue.</p> ',
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q0;
             if (resp==bold_phrase) {
@@ -296,7 +297,7 @@ function repeat_trial(iter, second_round_or_not) {
         type: 'html-keyboard-response',
         prompt: 'Half way there! Well done!',
         stimulus: '<p>Enjoy a longer break :)</p>',
-        trial_duration: 2500,
+        trial_duration: 2500
     };
 /*==========================================================================
  *                           FEEDBACK
@@ -332,7 +333,7 @@ timeline.push(long_break);
 test_lst = shuffle(test_lst);
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
-timeline.push(feedback)
+timeline.push(feedback);
 
 jsPsych.init({
 	display_element: 'jspsych-target',

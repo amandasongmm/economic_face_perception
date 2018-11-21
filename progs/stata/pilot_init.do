@@ -32,6 +32,16 @@ set matsize 11000
 *==============================================================================*
 
 
+*initial initial data processesing*
+
+*cd "$inputdata2"
+*import delimited using trialdata.csv, clear
+
+
+
+
+
+
 *=====================initial data processesing & cleaning=====================*
 
 
