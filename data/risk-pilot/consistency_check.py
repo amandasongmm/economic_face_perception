@@ -3,104 +3,157 @@ This file cleans trialData.csv
 """
 import json
 import pandas as pd
+import time
+import numpy as np
+import scipy.stats
+import matplotlib.pyplot as plt
+from os.path import basename
+from scipy.stats import spearmanr
 
 
 def parse_data(input_path='../../ptdir/trialdata.csv'):
 
+    start_t = time.time()
+
     # create a data frame
-    column_names = ["UserId", "trialNum", "trialId", "jsonStr"]
+    column_names = ["subId", "trialNum", "trialId", "jsonStr"]
     trial = pd.read_csv(input_path, names=column_names, header=None)
 
-    # set up the values we want to extract
-    trial_columns = ['subIdNum', 'assignmentID', 'hitID',
-                     'task_name', 'task_version', 'debug_mode', 'unique_trial_num',
-                     'trial_type', 'rt', 'internal_node_id', 'trial_index',
-                     'responses', 'imgName', 'imgNum', 'isRepeat']
-
-    demographic_columns = ['subIdNum', 'assignmentID', 'age', 'gender', 'hispanic', 'race', 'education',
-                           'sanity_check_pass', 'state', 'city', 'zipCode', 'feedback']
-
-    write_question_answers = []
+    debug_id_lst = ['A6XBXQC3G59N8:3VP0C6EFSI3WXKQRF9ERIP60I906M0', 'debugV9SJY8:debugA4LEZF']
+    trial = trial[~trial['subId'].isin(debug_id_lst)]
 
     # iterate over trials.
+    likert_data_df = pd.DataFrame(columns=['subId', 'rt', 'imgName', 'isRepeat', 'rating', 'trial_index'])
+    demo_survey_df = pd.DataFrame(columns=['subId', 'rt', 'age', 'gender', 'hispanic', 'ethnicity',  # demographics
+                                           'education', 'state', 'city', 'zipcode', 'sanityFailNum',  # demographics
+                                           'payment', 'total_unique_trials'])  # trial-task info.
+    feedback_df = pd.DataFrame(columns=['subId', 'feedback'])
+    likert_counter = 0
+    demo_survey_counter = 0
+    feedback_counter = 0
+
     for index, row in trial.iterrows():
-        combined_id = row['UserId']
-        assignmentID =
+
+        if index % 200 == 0:
+            print index, len(trial), time.time() - start_t
+
+        json_dict = json.loads(row['jsonStr'])
+
+        if json_dict['trial_type'] == 'face-likert-amanda':
+            likert_data_df.loc[likert_counter, 'subId'] = row['subId']
+            likert_data_df.loc[likert_counter, 'rt'] = json_dict['rt']
+            likert_data_df.loc[likert_counter, 'imgName'] = json_dict['imgName']
+            likert_data_df.loc[likert_counter, 'isRepeat'] = json_dict['isRepeat']
+            likert_data_df.loc[likert_counter, 'trial_index'] = json_dict['trial_index']
+            likert_data_df.loc[likert_counter, 'rating'] = json.loads(json_dict['responses'])['Q0'] + 1
+            # rating encoding starts from 0, add 1 to go back to 1-9 space
+            likert_counter += 1
+
+        elif json_dict['trial_type'] == 'survey-multi-choice':
+            demo_survey_df.loc[demo_survey_counter, 'subId'] = row['subId']
+            demo_survey_df.loc[demo_survey_counter, 'rt'] = json_dict['rt']
+            demo_survey_df.loc[demo_survey_counter, 'payment'] = json_dict['payment']
+            demo_survey_df.loc[demo_survey_counter, 'total_unique_trials'] = json_dict['total_unique_trials']
+
+            demo_survey_df.loc[demo_survey_counter, 'age'] = json.loads(json_dict['responses'])['Q0']
+            demo_survey_df.loc[demo_survey_counter, 'gender'] = json.loads(json_dict['responses'])['Q1']
+            demo_survey_df.loc[demo_survey_counter, 'hispanic'] = json.loads(json_dict['responses'])['Q2']
+            demo_survey_df.loc[demo_survey_counter, 'ethnicity'] = json.loads(json_dict['responses'])['Q4']
+            demo_survey_df.loc[demo_survey_counter, 'education'] = json.loads(json_dict['responses'])['Q5']
+            if pd.isnull(demo_survey_df.loc[demo_survey_counter, 'sanityFailNum']):
+                demo_survey_df.loc[demo_survey_counter, 'sanityFailNum'] = 0
+            else:
+                demo_survey_df.loc[demo_survey_counter, 'sanityFailNum'] = \
+                    demo_survey_df.loc[demo_survey_counter, 'sanityFailNum'] + 1 - json_dict['sanity_check_1_continue']
+                # if sanity_check_1_continue = True, the trial will continue, otherwise, it adds 1 to the
+                # sanityFailNum
+                # If one trial fails, and the next trial passes the sanity check, the new trial's data will overwrite
+                # previous trial's answers in the demographic questions.
+
+        elif json_dict['trial_type'] == 'survey-text-req' and len(json.loads(json_dict['responses'])) == 3:
+            # this condition checks if it's the address question. Need to add a task identifier later.
+            demo_survey_df.loc[demo_survey_counter, 'state'] = json.loads(json_dict['responses'])['Q0']
+            demo_survey_df.loc[demo_survey_counter, 'city'] = json.loads(json_dict['responses'])['Q1']
+            demo_survey_df.loc[demo_survey_counter, 'zipcode'] = json.loads(json_dict['responses'])['Q2']
+            demo_survey_counter += 1
+
+        elif json_dict['trial_type'] == 'survey-text':
+            feedback_df.loc[feedback_counter, 'subId'] = row['subId']
+            feedback_df.loc[feedback_counter, 'subId'] = json.loads(json_dict['responses'])['Q0']
+            feedback_counter += 1
+
+        likert_data_df.to_csv('likert_data.csv')
+        demo_survey_df.to_csv('demo_survey.csv')
+        feedback_df.to_csv('feedback.csv')
+
+
+def check_group_ind_consistency():
+    input_path = 'likert_data.csv'
+    likert_data = pd.read_csv(input_path, index_col=0)
+
+    # make a list for subjects.
+    sub_num_dict = {}
+    sub_counter = 1
+    for sub_id in likert_data['subId']:
+        if sub_id not in sub_num_dict:
+            sub_num_dict[sub_id] = sub_counter
+            sub_counter += 1
+    likert_data['subNum'] = likert_data['subId'].map(sub_num_dict)
+
+    # make a easy-to-read numbered list for images
+    img_num_dict = {}
+    img_counter = 0
+    for img_name in likert_data['imgName']:
+        if img_name not in img_num_dict:
+            img_num_dict[img_name] = img_counter
+            img_counter += 1
+
+    likert_data['imgNum'] = likert_data['imgName'].map(img_num_dict)
+
+    #
+    new_df = likert_data.sort_values(by=['subNum', 'isRepeat', 'imgNum'], ascending=True)
+    new_df.drop(columns=['subId', 'imgName'], inplace=True)
+    new_df = new_df[['subNum', 'imgNum', 'isRepeat', 'rating', 'rt']]
+
+    rho_lst = []
+    for cur_sub_id in range(1, len(new_df['subNum'].unique()) + 1):
+        cur_sub_data = new_df[new_df['subNum'] == cur_sub_id]
+
+        empty = cur_sub_data[cur_sub_data['imgNum'] == 0]['rating'].values
+
+        cur_sub_data = cur_sub_data[cur_sub_data['imgNum'] != 0]
+
+        cur_data_length = len(cur_sub_data)
+        unique_trial_num = cur_data_length / 2
+        if cur_data_length % 2 != 0:
+            raise Exception('the data length should be divisble by 2.')
+
+        full_data = cur_sub_data['rating'].values
+        first_half = cur_sub_data.head(unique_trial_num)['rating'].values
+        second_half = cur_sub_data.tail(unique_trial_num)['rating'].values
+        rho, p = spearmanr(first_half, second_half)
+        #     if p > 0.05:
+        rho_lst.append(rho)
+
+
+
+    return
+
+
+if __name__ == '__main__':
+    parse_data()
 
 
 
 
 
-    data = {key: [] for key in keys}
 
-    # Extracts the values
-    for jsonStr in trial.jsonStr:
-        jsonDict = json.loads(jsonStr)
-        for key in keys:
-            try:
-                data[key].append(jsonDict[key])
-            except KeyError:
-                data[key].append(None)
 
-    # Inserts the dictionary into the trial dataframe
-    for key in keys:
-        trial[key] = data[key]
 
-    # set up the values we want to extract for the question
-    qKeys = ['prompt', 'options', 'required', 'horizontal', 'labels']
-    qData = {key: [] for key in qKeys}
 
-    # Extraction - its a list because of the possibility of multiple prompts
-    # Column
-    for questions in trial.questions:
-        if questions is not None:
-            prompt = []
-            options = []
-            required = []
-            horizontal = []
-            labels = []
-            # row in the Column
-            for question in json.loads(questions):
-                try:
-                    prompt.append(question[key])
-                except KeyError:
-                    prompt.append(None)
 
-                try:
-                    options.append(question[key])
-                except KeyError:
-                    options.append(None)
 
-                try:
-                    required.append(question[key])
-                except KeyError:
-                    required.append(None)
 
-                try:
-                    horizontal.append(question[key])
-                except KeyError:
-                    horizontal.append(None)
 
-                try:
-                    labels.append(question[key])
-                except KeyError:
-                    labels.append(None)
 
-            qData['prompt'].append(prompt)
-            qData['options'].append(options)
-            qData['required'].append(required)
-            qData['horizontal'].append(horizontal)
-            qData['labels'].append(labels)
-        else:
-            for key in qKeys:
-                qData[key].append([None])
 
-    # Inserts question dictionary values into trial dataframe
-    for key in qKeys:
-        trial[key] = qData[key]
-
-    # Drop unwanted columns
-    trial = trial.drop(['jsonStr', '#', 'questions'], axis=1)
-
-    # Output the new file into current directory
-    trial.to_csv('second_pilot_DataClean.csv')

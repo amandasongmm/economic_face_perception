@@ -209,22 +209,152 @@ egen perceiver = group(userid)
 replace isrepeat = "0" if isrepeat == "False"
 replace isrepeat = "1" if isrepeat == "True"
 destring isrepeat, replace
+drop trial_type
+
+
+**Flag for pilot version
+
+tempfile mycopy
+save `mycopy', replace
+contract perceiver, freq(a)
+merge 1:m perceiver using `mycopy'
+
+drop if a == 10
+
+gen version = .
+replace version = 1 if a == 161
+replace version = 2 if a == 81
+replace version = 3 if a == 82
+
+drop a _merge
+
+*==================================Stats=======================================*
+
+***Identify and drop subjects that rate same thing >75% of the time
+***ADD multi-mode (2) 
+
+
+bysort perceiver: egen rating_mode = mode(rating)
+gen mode_check = 0
+replace mode_check = 1 if rating_mode == rating
+bysort perceiver: egen rating_modenum = total(mode_check)
+bysort perceiver: egen rat_count = count(rating)
+gen qual_check = rating_modenum/rat_count
+
+preserve 
+keep if version == 1
+tab qual_check
+restore
+
+preserve 
+keep if version == 2
+tab qual_check
+restore
+
+preserve 
+keep if version == 3
+tab qual_check
+restore
 
 
 
+***Test-retest reliability***
+
+**All data
+
+preserve
+keep perceiver target rating isrepeat
+reshape wide rating, i(perceiver target) j(isrepeat)
+corr rating0 rating1
+by perceiver: corr rating0 rating1
+restore
+
+
+**pilot 1
+preserve
+keep if version == 1
+keep perceiver target rating isrepeat
+reshape wide rating, i(perceiver target) j(isrepeat)
+corr rating0 rating1
+by perceiver: corr rating0 rating1
+restore
+
+**pilot 2a
+preserve 
+keep if version == 2 
+keep perceiver target rating isrepeat
+reshape wide rating, i(perceiver target) j(isrepeat)
+corr rating0 rating1
+by perceiver: corr rating0 rating1
+restore
+
+**pilot 2b
+
+preserve 
+keep if version == 3 
+keep perceiver target rating isrepeat
+reshape wide rating, i(perceiver target) j(isrepeat)
+corr rating0 rating1
+by perceiver: corr rating0 rating1
+restore
+
+**pilots 2a + 2b
+preserve 
+keep if version == 3 | version == 2 
+keep perceiver target rating isrepeat
+reshape wide rating, i(perceiver target) j(isrepeat)
+corr rating0 rating1
+by perceiver: corr rating0 rating1
+restore
+
+***Generate within person measure of test-retest reliability
+
+preserve
+keep perceiver target rating isrepeat
+reshape wide rating, i(perceiver target) j(isrepeat)
+gen trr = .
+*by perceiver: corr rating0 rating1
+*return list, all
+
+corr rating0 rating1 if perceiver == 1
+return list
+
+levelsof perceiver, local(trr_list)
+foreach perciever in `trr_list' {
+	corr rating0 rating1
+	replace trr = `r(rho)' if perceiver == `trr_list'
+}
 
 
 
-*clear 
-*cd "$inputdata2"
-*import delimited using trialdata.csv, clear
-*
+by perceiver: replace trr = corr rating0 rating1
+tempfile trr
+save `trr', replace
+restore
+merge 1:m perceiver using `trr'
 
 
+****Getting ICC****
+
+keep if version == 3
+
+sort userid imgname isrepeat
+bysort userid imgname: gen avg_rat = (rating +rating[_n+1])/2 if isrepeat == 0
+drop if isrepeat == 1
+
+icc avg_rat target perceiver
 
 
+***Getting ICCs***
+/*
+preserve
 
+keep if version == 1
+icc rating target perceiver
 
+restore
+
+*/
 
 
 

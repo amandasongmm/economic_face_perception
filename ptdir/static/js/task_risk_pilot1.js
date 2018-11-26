@@ -134,7 +134,7 @@ function sleep(milliseconds) {
         questions: [q_age, q_gender, q_hispanic, q_attention, q_race,  q_education, q_income],
         preamble: "Before we start, we'd like to know something about you :)",
         data: {random_num: random_num, payment: task_payment, total_unique_trials: unique_trial_num,
-            task_version: task_version, task_name: task_name, debug_mode: debug_mode,
+            task_version: task_version, task_name: task_name, debug_mode: debug_mode
         },
         //     var task_version = 2; // it has a mapping
         //     var task_name = 'take-risk';
@@ -180,6 +180,7 @@ function sleep(milliseconds) {
         button_label: 'Continue',
         placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
         preamble: 'Please tell us where you are located...',
+
     };
 
     /*==========================================================================
