@@ -379,14 +379,45 @@ keep if trr >= .85
 icc avg_rat target perceiver, cons
 restore
 
+*Pooled, filtered by qual-check
 
-
-
-
-
-
-
+preserve
+drop if qual_check > .3
 icc avg_rat target perceiver, cons
+restore
+
+*Pooled, filtered by qual-check & TRR
+
+preserve
+drop if qual_check > .4
+keep if trr >= .7
+icc avg_rat target perceiver, cons
+restore
+
+*Version 2 & 3, filtered by qual-check & TRR
+preserve
+keep if version == 2
+*keep if version == 2 | version == 3
+*drop if qual_check > .4
+keep if trr >= .8
+icc avg_rat target perceiver, cons
+restore
+
+
+
+preserve
+*keep if version == 1
+*keep if version == 2
+*keep if version == 3
+*keep if version == 2 | version == 3
+*keep if version == 1 | version == 2
+*keep if version == 1 | version == 3
+*keep if trr >= .7
+*drop if qual_check > .3
+icc rating target perceiver
+icc avg_rat target perceiver
+restore
+
 return list
 
 ***Getting ICCs***
