@@ -31,21 +31,37 @@ function sleep(milliseconds) {
   }
 }
 
-    var debug_mode = 0; // 1 - debug. 0 - actual live experiment.
-    var task_payment = 2; //
-    var task_version = 2; // create a mapping and specify the detailed operations and changes in each version.
-    var task_name = 'take-risk';
+
+
+    /*==========================================================================
+     *                               Experiment Parameters
+     * ========================================================================= */
+
+
+    var exp_mode = 'live'; // 'debug', 'sandbox', 'live'
+
+    var view_time = 200; // miliseconds. 200
+    var task_payment = 1; //
+    var task_version = 1; // create a mapping and specify the detailed operations and changes in each version.
+    var task_name = 'interview decision';
+
+
     var each_chuck_img_num = 10; // 10
     var require_or_not = true;
-    var iter_total = 4;  // 2 or 4. 2 for the 40 unique trials, 4 for the 80 unique trials
+    var iter_total = 5;  // 5 for 50 unique trials.
     var unique_trial_num = each_chuck_img_num * iter_total;
 
     var test_lst = all_lst.slice(0, unique_trial_num);
     test_lst = shuffle(test_lst);
 
 
-
-
+    jsPsych.data.addProperties({
+        debug_mode: exp_mode,
+        task_name: task_name,
+        task_version: task_version,
+        task_payment: task_payment,
+        task_unique_trial: unique_trial_num
+});
 
 
     /*==========================================================================
@@ -63,25 +79,26 @@ function sleep(milliseconds) {
 
     /* welcome message */
     var page_1 = '<h2>Welcome to the face perception experiment!</h2> ' +
-		'<p>In this experiment, you will see a number of facial images. </p> ' +
+		'<p>In this experiment, you will see a number of facial photos. </p> ' +
 		'<p>Your task is to indicate <strong>your belief</strong> about the person in the picture. </p>';
-	
+
     var page_2 = '<p>Please read the questions carefully and make sure you understand them before proceeding.</p>' +
-		 '<p> You may take as long as you need to answer each question.</p>' +
-		 '<p> <strong>Your responses</strong> will be compared with those of <strong>other</strong> participants.</p>' +
-	    	 '<p> The <strong>closer</strong> you are to the average of everyone else, the <strong>better</strong>.</p>';
+		 // '<p> You may take as long as you need to answer each question.</p>' +
+	    	 '<p> The <strong>closer</strong> your responses are to other people, the <strong>better</strong>.</p>' +
+        '<p>If your reaction is similar to the majority group, you may get invited for future studies with bonus options.</p>';
 
-    var page_3 = '<p>The experiment takes on average <strong>10-15</strong> minutes to finish, you will view 80 faces in total.</p>' +
+    var page_3 = '<p>The experiment takes on average <strong>10-15</strong> minutes to finish, and you will view 100 faces in total.</p>' +
         '<p>You will have a short break after every 10 faces. You need to finish them <strong>within 30</strong> minutes.</p>' +
-        '<p>It will automatically close after 30 minutes so if you don’t finish it within time, you won’t get paid.';
+        '<p>It will automatically close after 30 minutes. If you don’t finish it within time, you won’t get paid.';
 
-    var page_4 = '<p><b>Please study the face for at least 1 second before selecting. You will not be able to respond ' +
-        'to the question until 1 second has passed.</b> <p>Good Luck and have fun!</p>';
+    var page_4 = '<p><b>Please examine the faces carefully before making decisions. There will be a very short viewing time and you will not be able to respond ' +
+        'to the question until that time has passed.</b> <p>Good Luck and have fun!</p>';
 
     var instruction_block = {
         type: 'instructions',
         pages: [page_1, page_2, page_3, page_4],
-        show_clickable_nav: true
+        show_clickable_nav: true,
+        data: {task_type: 'instruction'}
     };
 
     /*==========================================================================
@@ -107,9 +124,9 @@ function sleep(milliseconds) {
         required: require_or_not};
 
     var q_hispanic = {
-	prompt: 'Are you of Hispanic, Latino, or Spanish origin?',
-	options: ['Yes', 'No'],
-	required: require_or_not};
+        prompt: 'Are you of Hispanic, Latino, or Spanish origin?',
+        options: ['Yes', 'No'],
+        required: require_or_not};
 
     var q_race = {
         prompt: 'How would you describe yourself?',
@@ -133,11 +150,8 @@ function sleep(milliseconds) {
 
         questions: [q_age, q_gender, q_hispanic, q_attention, q_race,  q_education, q_income],
         preamble: "Before we start, we'd like to know something about you :)",
-        data: {random_num: random_num, payment: task_payment, total_unique_trials: unique_trial_num,
-            task_version: task_version, task_name: task_name, debug_mode: debug_mode
-        },
-        //     var task_version = 2; // it has a mapping
-        //     var task_name = 'take-risk';
+        data: {random_num: random_num, task_type: 'demographic-multichoice'},
+
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q3;
 
@@ -180,15 +194,17 @@ function sleep(milliseconds) {
         button_label: 'Continue',
         placeholders: ['e.g. CA', 'e.g. San Diego', 'e.g. 92037'],
         preamble: 'Please tell us where you are located...',
+        data: {task_type: 'demographics_location'}
 
     };
 
     /*==========================================================================
      *                        Comprehension Check
      * ========================================================================= */
-    var target_question = "<p><font color='red'>How willing or unwilling do you think this person is to " +
-        "<strong>take risks</strong>?</font></p>";
-    var bold_phrase = 'How willing or unwilling do you think this person is to take risks?';
+    var target_question = "<p>Imagine you are an interviewer and you are screening candidates profile photos.</p><p><font color='red'> " +
+        "How much would you like to invite this person for a " +
+        "<strong>job interview</strong>?</font></p>";
+    var bold_phrase = 'How much would like to invite this person for a job interview?';
 
     var comprehension_question = {
         type: 'survey-text-req',
@@ -197,9 +213,10 @@ function sleep(milliseconds) {
         columns: [150],
         required: [require_or_not],
         button_label: 'Continue',
-        placeholders: [bold_phrase],
+        placeholders: ['Enter "How much would you like to invite this person for a job interview?"'],
         preamble: '<p>Below is the question you will see for the rest of the task.</p>' +
-        '<p>Enter the whole sentence in red <strong>word for word</strong>(including the question mark) to continue.</p> ',
+        '<p><strong>Enter the whole sentence in red word for word </strong>(including the question mark) to continue.</p> ',
+        data: {task_type: 'question comprehension'},
         on_finish: function(data) {
             var resp = JSON.parse(data.responses).Q0;
             if (resp==bold_phrase) {
@@ -229,11 +246,11 @@ function sleep(milliseconds) {
 /*==========================================================================
  *                           empty face
  * ========================================================================= */
-var prompty_que = '<p>How willing or unwilling do you think this person is to take risks? Rate from 1-9</p>';
+var prompty_que = '<p>How much would you like to invite this person for a job interview? Rate from 1-9</p>';
 
-var labels = ["1 <br/>(Completely unwilling to take risks)",
+var labels = ["1 <br/>(Completely unwilling to invite him/her)",
              "2", "3", "4", "5", "6", "7", "8",
-             "9  <br/>(Very willing to take risks)"];
+             "9  <br/>(Very willing to invite him/her)"];
 
 
 function empty_face(second_round_or_not) {
@@ -247,7 +264,8 @@ function empty_face(second_round_or_not) {
         }],
         imgname: '/static/images/faces/empty-image-1.jpg',
         preamble: 'This face is left empty on purpose. Just imagine this is a random person.',
-        isRepeat: second_round_or_not
+        isRepeat: second_round_or_not,
+        data: {task_type: 'empty face'}
 
     };
 
@@ -271,16 +289,17 @@ function empty_face(second_round_or_not) {
 function repeat_trial(iter, second_round_or_not) {
 
     var face_likert_trials = {
-        //on_start: sleep(5000),
+        on_start: sleep(view_time),
         type: 'face-likert-amanda',
         questions: [
             {prompt: prompty_que,
                 labels: labels,
-                required: true,
+                required: true
             }],
         timeline: test_lst.slice(iter*each_chuck_img_num, (iter+1)*each_chuck_img_num),
         randomize_order: true,
-        isRepeat: second_round_or_not
+        isRepeat: second_round_or_not,
+        data: {task_type: 'face trials'}
     };
 
     var break_trial = {
@@ -288,7 +307,7 @@ function repeat_trial(iter, second_round_or_not) {
         prompt: 'You have finished '+ (iter+1+second_round_or_not*iter_total) + '/' + iter_total * 2 +' of the task',
         stimulus: '<p>Good job! Let us take a quick break!</p>',
         trial_duration: function () {
-            return jsPsych.randomization.sampleWithReplacement([750, 1000, 2000], 1)[0];
+            return jsPsych.randomization.sampleWithReplacement([750, 1000, 1500], 1)[0];
         }
     };
 
@@ -304,19 +323,69 @@ function repeat_trial(iter, second_round_or_not) {
         type: 'html-keyboard-response',
         prompt: 'Half way there! Well done!',
         stimulus: '<p>Enjoy a longer break :)</p>',
-        trial_duration: 2500
+        trial_duration: 2000
     };
+
+
+
 /*==========================================================================
- *                           FEEDBACK
+ *                           FEEDBACK for the interview invitation decision
  * ========================================================================= */
- var feedback = {
-    type: 'survey-text',
+ var feedback_for_interview = {
+     type: 'survey-text-req',
+     questions: ['What criteria do you use to make the interview invitation decisions?',
+         'What type of people will make you want to invite?',
+         'What type of people make you unwilling to invite?',
+         'Do you think you are consistent (make the same decision given the same face) among the task?',
+         "Is there anything else you want to share with us?"],
+     rows: [4, 4, 4, 4, 4],
+     columns: [100, 100, 100, 100, 100],
+     required: [require_or_not, require_or_not, require_or_not, require_or_not, require_or_not],
+     button_label: 'Continue',
+     placeholders: ["e.g. I will use my first impression on them to make the decision",
+         "e.g. I like it when they wear genuine smiles on the face. etc.",
+         "e.g. I don't feel like inviting people who look gloomy. etc.",
+         "e.g. Yes, I am very consistent, I use the same criteria./ No, it largely depend on my mood/ " +
+         "I am not sure whether I am self-consistent",
+         "e.g. Anything else, my dear friend?"],
+     preamble: 'Could you tell us how you make these decisions?',
+     data: {task_type: 'interview decision making feedback'}
+    };
+
+
+
+ /*==========================================================================
+ *                           FEEDBACK for future following studies
+ * ========================================================================= */
+ var future_invitation = {
+    type: 'survey-multi-choice',
     questions: [
-        {prompt: 'If you have any feedback_for_hit you would like to give to us, please write them here. Any kind of comments are welcome. ' +
-            'Is the task interesting, confusing, boring, etc? How do you like it? ' +
-            'Otherwise click continue to finish the experiment.'}
-        ]
-    }
+        {prompt: 'Would you like to be invited for similar future studies?', options: ['Yes', 'No'],
+            required: require_or_not
+        }
+        ],
+     preamble: '',
+     data: {task_type: 'feedback for future study'}
+    };
+
+/*==========================================================================
+ *                           FEEDBACK for the HIT
+ * ========================================================================= */
+
+
+var feedback_for_hit = {
+     type: 'survey-text-req',
+     questions: ['How do you like this HIT? Interesting? Boring? Confusing? Fun? Tell us anything you like.'],
+     rows: [4],
+     columns: [100],
+     required: [false],
+     button_label: 'Continue',
+     placeholders: ["e.g. it's fun. I would love to do it again."],
+     preamble: 'Last question!',
+     data: {task_type: 'feedback for HIT'}
+    };
+
+
 /*==========================================================================
  *                           RUN JSPSYCH
  * ========================================================================= */
@@ -340,7 +409,12 @@ timeline.push(long_break);
 test_lst = shuffle(test_lst);
 for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
-timeline.push(feedback);
+// feedback for the interview decision making process
+timeline.push(feedback_for_interview);
+timeline.push(future_invitation);
+
+// feedback for the overall HIT
+timeline.push(feedback_for_hit);
 
 jsPsych.init({
 	display_element: 'jspsych-target',

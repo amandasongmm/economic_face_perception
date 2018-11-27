@@ -2,7 +2,7 @@
  * Josh de Leeuw
  *
  * This plugin displays text (including HTML formatted strings) during the experiment.
- * Use it to show instructions, provide performance feedback, etc...
+ * Use it to show instructions, provide performance feedback_for_hit, etc...
  *
  * Page numbers can be displayed to help with navigation by setting show_page_number
  * to true.

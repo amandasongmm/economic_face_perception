@@ -7,7 +7,6 @@ import time
 import numpy as np
 import scipy.stats
 import matplotlib.pyplot as plt
-from os.path import basename
 from scipy.stats import spearmanr
 
 
@@ -27,7 +26,7 @@ def parse_data(input_path='../../ptdir/trialdata.csv'):
     demo_survey_df = pd.DataFrame(columns=['subId', 'rt', 'age', 'gender', 'hispanic', 'ethnicity',  # demographics
                                            'education', 'state', 'city', 'zipcode', 'sanityFailNum',  # demographics
                                            'payment', 'total_unique_trials'])  # trial-task info.
-    feedback_df = pd.DataFrame(columns=['subId', 'feedback'])
+    feedback_df = pd.DataFrame(columns=['subId', 'feedback_for_hit'])
     likert_counter = 0
     demo_survey_counter = 0
     feedback_counter = 0
@@ -84,7 +83,7 @@ def parse_data(input_path='../../ptdir/trialdata.csv'):
 
         likert_data_df.to_csv('likert_data.csv')
         demo_survey_df.to_csv('demo_survey.csv')
-        feedback_df.to_csv('feedback.csv')
+        feedback_df.to_csv('feedback_for_hit.csv')
 
 
 def check_group_ind_consistency():
