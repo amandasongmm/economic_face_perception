@@ -40,9 +40,9 @@ function sleep(milliseconds) {
 
     var exp_mode = 'live'; // 'debug', 'sandbox', 'live'
 
-    var view_time = 200; // miliseconds. 200
-    var task_payment = 1; //
-    var task_version = 1; // create a mapping and specify the detailed operations and changes in each version.
+    var view_time = 300; // miliseconds. 200
+    var task_payment = 1.2; //
+    var task_version = 2; // create a mapping and specify the detailed operations and changes in each version.
     var task_name = 'interview decision';
 
 
@@ -78,21 +78,22 @@ function sleep(milliseconds) {
      * ========================================================================= */
 
     /* welcome message */
-    var page_1 = '<h2>Welcome to the face perception experiment!</h2> ' +
+    var page_1 = '<h2>Welcome to the face interview experiment!</h2> ' +
 		'<p>In this experiment, you will see a number of facial photos. </p> ' +
-		'<p>Your task is to indicate <strong>your belief</strong> about the person in the picture. </p>';
+		'<p>Your task is to indicate <strong>your preference</strong> about the person in the picture. </p>';
 
-    var page_2 = '<p>Please read the questions carefully and make sure you understand them before proceeding.</p>' +
+    var page_2 = '<p>Please read the questions carefully before proceeding.</p>' +
 		 // '<p> You may take as long as you need to answer each question.</p>' +
 	    	 '<p> The <strong>closer</strong> your responses are to other people, the <strong>better</strong>.</p>' +
         '<p>If your reaction is similar to the majority group, you may get invited for future studies with bonus options.</p>';
 
-    var page_3 = '<p>The experiment takes on average <strong>10-15</strong> minutes to finish, and you will view 100 faces in total.</p>' +
-        '<p>You will have a short break after every 10 faces. You need to finish them <strong>within 30</strong> minutes.</p>' +
+    var page_3 = '<p>The experiment takes on average <strong>10-20</strong> minutes to finish.</p>' +
+        '<p>You need to finish them <strong>within 30</strong> minutes.</p>' +
         '<p>It will automatically close after 30 minutes. If you don’t finish it within time, you won’t get paid.';
 
-    var page_4 = '<p><b>Please examine the faces carefully before making decisions. There will be a very short viewing time and you will not be able to respond ' +
-        'to the question until that time has passed.</b> <p>Good Luck and have fun!</p>';
+    var page_4 = '<p><b>Please examine the faces carefully before making decisions.</b></p>' +
+        '<p>You will get a quick notice about your progress after every 10 faces.</p>' +
+        '<p>Good Luck and have fun!</p>';
 
     var instruction_block = {
         type: 'instructions',
@@ -201,10 +202,11 @@ function sleep(milliseconds) {
     /*==========================================================================
      *                        Comprehension Check
      * ========================================================================= */
-    var target_question = "<p>Imagine you are an interviewer and you are screening candidates profile photos.</p><p><font color='red'> " +
+    var target_question = "<p>Imagine you are an interviewer and you are screening candidates profile photos.</p><p><font color='red'>" +
         "How much would you like to invite this person for a " +
         "<strong>job interview</strong>?</font></p>";
-    var bold_phrase = 'How much would like to invite this person for a job interview?';
+
+    var bold_phrase = 'How much would you like to invite this person for a job interview?';
 
     var comprehension_question = {
         type: 'survey-text-req',
@@ -213,7 +215,7 @@ function sleep(milliseconds) {
         columns: [150],
         required: [require_or_not],
         button_label: 'Continue',
-        placeholders: ['Enter "How much would you like to invite this person for a job interview?"'],
+        placeholders: ['How much would you like to invite this person for a job interview?'],
         preamble: '<p>Below is the question you will see for the rest of the task.</p>' +
         '<p><strong>Enter the whole sentence in red word for word </strong>(including the question mark) to continue.</p> ',
         data: {task_type: 'question comprehension'},
@@ -248,9 +250,9 @@ function sleep(milliseconds) {
  * ========================================================================= */
 var prompty_que = '<p>How much would you like to invite this person for a job interview? Rate from 1-9</p>';
 
-var labels = ["1 <br/>(Completely unwilling to invite him/her)",
+var labels = ["1 <br/>(Completely unwilling to invite the person)",
              "2", "3", "4", "5", "6", "7", "8",
-             "9  <br/>(Very willing to invite him/her)"];
+             "9  <br/>(Very willing to invite the person)"];
 
 
 function empty_face(second_round_or_not) {
@@ -263,7 +265,7 @@ function empty_face(second_round_or_not) {
             required: true
         }],
         imgname: '/static/images/faces/empty-image-1.jpg',
-        preamble: 'This face is left empty on purpose. Just imagine this is a random person.',
+        preamble: 'This face is left empty on purpose. Just imagine this is an average person.',
         isRepeat: second_round_or_not,
         data: {task_type: 'empty face'}
 
@@ -305,9 +307,9 @@ function repeat_trial(iter, second_round_or_not) {
     var break_trial = {
         type: 'html-keyboard-response',
         prompt: 'You have finished '+ (iter+1+second_round_or_not*iter_total) + '/' + iter_total * 2 +' of the task',
-        stimulus: '<p>Good job! Let us take a quick break!</p>',
+        stimulus: '<p>Good job!</p>',
         trial_duration: function () {
-            return jsPsych.randomization.sampleWithReplacement([750, 1000, 1500], 1)[0];
+            return jsPsych.randomization.sampleWithReplacement([1000, 1500, 2000], 1)[0];
         }
     };
 
@@ -322,8 +324,8 @@ function repeat_trial(iter, second_round_or_not) {
     var long_break = {
         type: 'html-keyboard-response',
         prompt: 'Half way there! Well done!',
-        stimulus: '<p>Enjoy a longer break :)</p>',
-        trial_duration: 2000
+        stimulus: '<p>Enjoy a 5 seconds break :)</p>',
+        trial_duration: 5000
     };
 
 
@@ -375,12 +377,12 @@ function repeat_trial(iter, second_round_or_not) {
 
 var feedback_for_hit = {
      type: 'survey-text-req',
-     questions: ['How do you like this HIT? Interesting? Boring? Confusing? Fun? Tell us anything you like.'],
+     questions: ['How do you like this HIT? Interesting? Boring? Confusing? Fun? Do you think you are fairly paid? Tell us anything you like.'],
      rows: [4],
      columns: [100],
      required: [false],
      button_label: 'Continue',
-     placeholders: ["e.g. it's fun. I would love to do it again."],
+     placeholders: ["e.g. it's fun. I would love to do a similar task again."],
      preamble: 'Last question!',
      data: {task_type: 'feedback for HIT'}
     };
@@ -411,7 +413,7 @@ for (iter=0; iter<iter_total; iter++) {repeat_trial(iter, 1)}
 
 // feedback for the interview decision making process
 timeline.push(feedback_for_interview);
-timeline.push(future_invitation);
+// timeline.push(future_invitation);
 
 // feedback for the overall HIT
 timeline.push(feedback_for_hit);

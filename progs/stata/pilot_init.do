@@ -316,34 +316,78 @@ gen trr = .
 *by perceiver: corr rating0 rating1
 *return list, all
 
-corr rating0 rating1 if perceiver == 1
-return list
+*corr rating0 rating1 if perceiver == 1
+*return list
 
 levelsof perceiver, local(trr_list)
-foreach perciever in `trr_list' {
-	corr rating0 rating1
-	replace trr = `r(rho)' if perceiver == `trr_list'
+foreach i in `trr_list' {
+	corr rating0 rating1 if perceiver == `i'
+	replace trr = `r(rho)' if perceiver == `i'
 }
+keep if target == 1
+keep perceiver trr
 
-
-
-by perceiver: replace trr = corr rating0 rating1
 tempfile trr
 save `trr', replace
 restore
-merge 1:m perceiver using `trr'
-
+merge m:1 perceiver using `trr'
 
 ****Getting ICC****
 
-keep if version == 3
+**Generate average rating
 
 sort userid imgname isrepeat
 bysort userid imgname: gen avg_rat = (rating +rating[_n+1])/2 if isrepeat == 0
 drop if isrepeat == 1
 
+*Fully pooled sample
 icc avg_rat target perceiver
 
+*Version 1, unfiltered
+
+preserve
+keep if version == 1
+icc avg_rat target perceiver
+restore
+
+*Version 2, unfiltered
+
+preserve
+keep if version == 2
+icc avg_rat target perceiver
+restore
+
+*Version 3, unfiltered
+
+preserve
+keep if version == 3
+icc avg_rat target perceiver
+restore
+
+
+*Version 3+2, unfiltered
+
+preserve
+keep if version == 2 | version == 3
+icc avg_rat target perceiver
+restore
+
+*Pooled, filtered by TRR
+
+preserve
+keep if trr >= .85
+icc avg_rat target perceiver, cons
+restore
+
+
+
+
+
+
+
+
+icc avg_rat target perceiver, cons
+return list
 
 ***Getting ICCs***
 /*
