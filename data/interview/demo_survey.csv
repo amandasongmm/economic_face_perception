@@ -1,2 +1,11 @@
 ,subId,rt,age,gender,hispanic,ethnicity,education,income,state,city,zipcode,sanityFailNum
 0,debugKXH3HJ:debugFOUV4M,13550,Under 18,Male,Yes,American Indian or Alaskan Native,Less than a high school diploma,"Less than $20,000",debug,debug,debug,0
+1,A2S75O867RJG0I:37UEWGM5HVFSNE2MEBYQVXB1JWA1RD,28559,18-25,Male,Yes,White,"Associate degree (e.g. AA, AS)","$35,000 - $49,999",MO,Kansas City,64114,0
+2,A1V2H0UF94ATWY:3G2UL9A02FLDCHJ4B3C1LCBIQVW67H,16930,56+,Male,No,White,"Some college, no degree","$35,000 - $49,999",PA,Pittsburgh,16105,0
+3,A2TZKV4CB8K6XF:3S0TNUHWKVPGX432VVCL5IH5I2TD89,18667,36-45,Male,No,White,High school degree or equivalent (e.g. GED),"$35,000 - $49,999",CA,Hanford,93230,0
+4,APL21ZIGWMI6T:3PJUZCGDJ8N4UEQLJF7JJMYFRGA89H,24535,36-45,Female,No,Black or African-American,Professional or post-baccalauriate degree,"$50,000 - $74,999",MD,Bladensburg,20722,0
+5,A125KW9P18V5Z1:3AAPLD8UCEOG740SKP66NZSQO62THG,20558,36-45,Male,No,White,"Bachelor&#8217;s degree (e.g. BA, BS)","$20,000 - $34,999",UT,Salt Lake City,84044,0
+6,A3LL096CAY5WHB:3X87C8JFV8IS5XMGEFOAM8O5DAKQSK,17763,18-25,Male,No,White,High school degree or equivalent (e.g. GED),"$50,000 - $74,999",Wisconsin,Cudahy,53110,0
+7,A34142ZT9A8DJQ:3U4J9857OGIJIT0Z7UT9WSXA4XH7BF,17662,26-35,Female,No,White,"Some college, no degree","$20,000 - $34,999",ID,Boise,83706,0
+8,AK27D3SD6EZX6:3STRJBFXOYY79U10QA930R8IGN6TKK,26466,26-35,Male,Yes,White,"Associate degree (e.g. AA, AS)","$50,000 - $74,999",Illinois,Mattoon ,61938,0
+9,A1QIJ94TJ6FZ2W:3LJ7UR74RJKO0F7D8M0BKBDUUL8N45,10548,26-35,Female,No,White,"Some college, no degree","Less than $20,000",AL,Huntsville,35806,0

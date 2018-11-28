@@ -412,8 +412,8 @@ preserve
 *keep if version == 2 | version == 3
 *keep if version == 1 | version == 2
 *keep if version == 1 | version == 3
-*keep if trr >= .7
-*drop if qual_check > .3
+keep if trr >= .85
+drop if qual_check > .4
 icc rating target perceiver
 icc avg_rat target perceiver
 restore
