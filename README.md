@@ -4,12 +4,11 @@
 - Make sure you change the config.txt to make the right database name for the current experiment
 
 ## 1. Turning on the ubuntu machine on aws: (https://aws.amazon.com)
-- Use the password shared on Google Drive for account face4funguru@gmail.com
 - Go to EC2 - instances, start the instance ending in "ccd" on there (right click > state > start)
 - Don't fotget to turn it off when done
 
 ## 2. Connecting to machine:
-- Download face_eco_ubuntu.pem (private key)
+- Download private key (pem)
 - ssh -i "face_eco_ubuntu.pem" ubuntu@[ip address you get from the aws page)
 
 ## 3. Download latest codes from Github into the ubuntu machine on AWS
