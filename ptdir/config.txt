@@ -13,8 +13,8 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///pilot_attractive.db
-table_name = turkdemo
+database_url = sqlite:///gt_attractive.db
+table_name = turk
 
 [Server Parameters]
 host = 0.0.0.0
