@@ -8,7 +8,7 @@ from scipy.stats import spearmanr
 import os
 
 
-trait_name = 'attractive'
+trait_name = 'aggressive'
 likert_csv = './' + trait_name + '/likert_data.csv'
 
 
@@ -82,11 +82,15 @@ for sub_num in range(1, 16):
 qualified_sub_lst = []
 
 for i, (rho, p) in enumerate(zip(rho_lst, p_lst)):
-    if p < 0.05:
+    if p < 0.05 and rho > 0.:
         qualified_sub_lst.append(i + 1)
 
+print len(qualified_sub_lst)
 data_df = likert_data[likert_data['subNum'].isin(qualified_sub_lst)]
 data_df = data_df.groupby('imgNum', as_index=False)['rating'].mean()
+
+# all data
+all_data_df = likert_data.groupby('imgNum', as_index=False)['rating'].mean()
 
 # model prediction
 gt_rating_name = '../../preparation_data/amt_gt_validation/'+trait_name+'_stim_lst.csv'
@@ -98,7 +102,7 @@ gt_df = gt_rating_df.groupby('imgNum', as_index=False)[trait_name].mean()
 
 rho, p = spearmanr(data_df['rating'], gt_df[trait_name])
 print rho, p
-title_txt = '{}: rho = {:.2f}, p = {:.2f}'.format(trait_name, rho, p)
+title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub = {}'.format(trait_name, rho, p, len(qualified_sub_lst))
 plt.title(title_txt)
 plt.xlabel('Human rating')
 plt.ylabel('Model prediction')
@@ -110,4 +114,21 @@ plt.grid(color='gray', linestyle='--')
 plt.axes().set_aspect('equal')
 plt.scatter(data_df['rating'], gt_df[trait_name])
 plt.savefig('./' + trait_name + '/qualified_sub_with_model.png')
+plt.show()
+
+
+rho2, p2 = spearmanr(all_data_df['rating'], gt_df[trait_name])
+print rho2, p2
+title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub = {}'.format(trait_name, rho2, p2, 15)
+plt.title(title_txt)
+plt.xlabel('Human rating')
+plt.ylabel('Model prediction')
+
+## setting the limits on the x-axis and y-axis
+plt.xlim(1.5, 8.5)
+plt.ylim(1.5, 8.5)
+plt.grid(color='gray', linestyle='--')
+plt.axes().set_aspect('equal')
+plt.scatter(data_df['rating'], gt_df[trait_name])
+plt.savefig('./' + trait_name + '/all_sub_with_model.png')
 plt.show()
