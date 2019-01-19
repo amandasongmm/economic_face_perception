@@ -1,19 +1,19 @@
 [HIT Configuration]
-title = Face Attractiveness Study
-description = Evaluate facial attractiveness
+title = Face Aggressive Study
+description = Evaluate facial impression
 amt_keywords = Perception, Psychology
 lifetime = 3 
 us_only = true
 approve_requirement = 95
 contact_email_on_error = face4fun@gmail.com
-ad_group = Face Attractiveness
+ad_group = Face Impression
 psiturk_keywords = face perception
 organization_name = University of California, San Diego
 browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///gt_attractive.db
+database_url = sqlite:///gt_aggressive.db
 table_name = turk
 
 [Server Parameters]

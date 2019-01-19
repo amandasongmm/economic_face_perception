@@ -45,7 +45,7 @@ jsPsych.plugins['face-likert-amanda'] = (function() {
       preamble: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Preamble',
-        default: 'Please answer the question below',
+        default: 'Try to use the full range throughout the task.',
         description: 'String to display at top of the page.'
       },
       button_label: {
