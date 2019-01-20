@@ -8,7 +8,7 @@ from scipy.stats import spearmanr
 import os
 
 
-trait_name = 'aggressive'
+trait_name = 'trustworthy'
 likert_csv = './' + trait_name + '/likert_data.csv'
 
 
@@ -84,6 +84,8 @@ qualified_sub_lst = []
 for i, (rho, p) in enumerate(zip(rho_lst, p_lst)):
     if p < 0.05 and rho > 0.:
         qualified_sub_lst.append(i + 1)
+    else:
+        print(rho, p)
 
 print len(qualified_sub_lst)
 data_df = likert_data[likert_data['subNum'].isin(qualified_sub_lst)]
@@ -101,7 +103,7 @@ gt_rating_df[trait_name] = gt_rating_df[trait_name].astype(np.float64)
 gt_df = gt_rating_df.groupby('imgNum', as_index=False)[trait_name].mean()
 
 rho, p = spearmanr(data_df['rating'], gt_df[trait_name])
-print rho, p
+print rho, p, 'qualified subject data'
 title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub = {}'.format(trait_name, rho, p, len(qualified_sub_lst))
 plt.title(title_txt)
 plt.xlabel('Human rating')
@@ -118,7 +120,7 @@ plt.show()
 
 
 rho2, p2 = spearmanr(all_data_df['rating'], gt_df[trait_name])
-print rho2, p2
+print rho2, p2, 'Use all data'
 title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub = {}'.format(trait_name, rho2, p2, 15)
 plt.title(title_txt)
 plt.xlabel('Human rating')
