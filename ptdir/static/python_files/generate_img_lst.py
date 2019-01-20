@@ -7,6 +7,8 @@ import numpy as np
 from pylab import imread
 import matplotlib.pyplot as plt
 from sklearn.utils import shuffle
+from os import listdir
+from os.path import isfile, join
 
 
 
@@ -190,6 +192,7 @@ def gen_gt_stim_lst():
         # save_txt_name = '../../../preparation_data/amt_gt_validation/'+trait+'.txt'
         stim_df.to_csv(save_csv_name)
 
+    # write the stim_lst into a txt file and then copy and paste into a javascript file.
     for trait in trait_lst:
         print trait
         dst_dir = '/static/images/celeba_gt_crop/' + trait + '/'
@@ -203,6 +206,24 @@ def gen_gt_stim_lst():
                 f.write("{imgname: '" + dst_dir + file_name + "'},\n")
             f.write('];\n')
 
+
+def gen_modifae_single_rating_stim_lst():
+
+    trait_lst = ['attractive', 'aggressive', 'trustworthy', 'intelligent']
+
+    n_unique_num = 80
+    n_rep_num = 20
+
+    for trait in trait_lst:
+
+        img_dir = '../images/modifAE_linspace/' + trait + '/'
+        img_lst = [f for f in listdir(img_dir) if isfile(join(img_dir, f))]
+
+        #todo: sample n_unique elements from the list, then randomly repeat n_rep_num of them.
+        #todo: save the score of the chosen list. save it as groundtruth.
+
+
+    return
 
 if __name__ == '__main__':
     gen_gt_stim_lst()
