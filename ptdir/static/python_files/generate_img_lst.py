@@ -215,6 +215,7 @@ def gen_modifae_single_rating_stim_lst():
     n_rep_num = 20
 
     for trait in trait_lst:
+        print trait
 
         img_dir = '../images/modifAE_linspace/' + trait + '/'
         img_lst = [f for f in listdir(img_dir) if isfile(join(img_dir, f))]
@@ -222,12 +223,47 @@ def gen_modifae_single_rating_stim_lst():
         #todo: sample n_unique elements from the list, then randomly repeat n_rep_num of them.
         #todo: save the score of the chosen list. save it as groundtruth.
 
+        select_lst = np.random.choice(len(img_lst), size=n_unique_num, replace=False)
+
+        rating_lst, name_lst = [], []
+        for cur_ind in select_lst:
+            cur_file_name = img_lst[cur_ind]
+            cur_rating = cur_file_name.split(".png")[0].split("_")[1]
+            cur_rating = float(cur_rating)
+            name_lst.append(cur_file_name)
+            rating_lst.append(cur_rating)
+
+        stim_df = pd.DataFrame(columns=['Filename', trait])
+        stim_df['Filename'] = name_lst
+        stim_df[trait] = rating_lst
+        stim_df['repeat'] = 0
+
+        stim_repeat = stim_df.sample(n_rep_num)
+        stim_repeat['repeat'] = 1
+
+        stim_df = pd.concat([stim_df, stim_repeat], ignore_index=True)
+        stim_df = shuffle(stim_df)
+        stim_df = stim_df.sample(frac=1, random_state=1)
+        print stim_df['Filename'].nunique()
+
+        save_csv_name = '../../../preparation_data/amt_modifAE_single_rating/' + trait + '_stim_lst.csv'
+        stim_df.to_csv(save_csv_name)
+
+        dst_dir = '/static/images/modifAE_linspace/' + trait + '/'
+        save_txt_name = '../../../preparation_data/amt_modifAE_single_rating/'+ trait+'.txt'
+
+        with open(save_txt_name, 'w') as f:
+            f.write("var all_lst = [\n")
+            for file_name in stim_df['Filename'].values:
+                f.write("{imgname: '" + dst_dir + file_name + "'},\n")
+            f.write('];\n')
 
     return
 
-if __name__ == '__main__':
-    gen_gt_stim_lst()
 
+if __name__ == '__main__':
+    # gen_gt_stim_lst()
+    gen_modifae_single_rating_stim_lst()
 
 
 

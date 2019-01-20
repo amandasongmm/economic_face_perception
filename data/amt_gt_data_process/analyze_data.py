@@ -8,7 +8,7 @@ from scipy.stats import spearmanr
 import os
 
 
-trait_name = 'trustworthy'
+trait_name = 'intelligent'
 likert_csv = './' + trait_name + '/likert_data.csv'
 
 
