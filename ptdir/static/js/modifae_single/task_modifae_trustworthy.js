@@ -48,7 +48,7 @@ function sleep(milliseconds) {
 
     var each_chuck_img_num = 10; // 10
     var require_or_not = true;
-    var iter_total = 1;  // 5 for 50 unique trials. 10 for 100 trials.
+    var iter_total = 10;  // 5 for 50 unique trials. 10 for 100 trials.
     var unique_trial_num = each_chuck_img_num * iter_total;
 
     var test_lst = all_lst.slice(0, unique_trial_num);
