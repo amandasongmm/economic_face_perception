@@ -11,7 +11,6 @@ from os import listdir
 from os.path import isfile, join
 
 
-
 def gen_img_lst(key_word):
     if key_word == 'chicago':
         # Move the Chicago faces into the same folder.
@@ -132,6 +131,53 @@ def gen_img_collage():
             plt.imshow(image)
 
         fig.savefig('../images/collage/'+str(im_id)+'.png')
+
+
+def gen_img_collage_modifae_model():
+
+    trait_lst = ['attractive', 'aggressive', 'trustworthy', 'intelligent']
+
+    for trait_name in trait_lst:
+        print trait_name
+        img_dir = '../../../ptdir/static/images/modifAE_linspace/' + trait_name + '/'
+        img_save_dir = '../../../ptdir/static/images/modifAE_linspace/' + trait_name + '_collage/'
+
+        model_rating_csv_dir = '../../../preparation_data/amt_modifAE_single_rating/' + trait_name + '_stim_lst.csv'
+        model_df = pd.read_csv(model_rating_csv_dir)
+        model_df = model_df.sort_values(by=[trait_name])
+
+        if not os.path.isdir(img_save_dir):
+            os.makedirs(img_save_dir)
+        # 80 images in total. plot 5 figure.
+        # each contain 4*4.
+
+        fig_num = 5
+        column_num = 4
+        row_num = 4
+
+        for cur_fig in range(0, fig_num):
+            fig = plt.figure()
+
+            for i in range(1, column_num * row_num + 1):
+                cur_im_path = img_dir + model_df['Filename'].iloc[cur_fig*column_num*row_num + i - 1]
+                model_rating = float(model_df[trait_name].iloc[cur_fig*column_num*row_num + i - 1])
+                model_rating = 4 * model_rating + 5
+
+                subtitle = '{:.1f}'.format(model_rating)
+                image = imread(cur_im_path)
+
+                fig.add_subplot(row_num, column_num, i)
+                plt.axis('off')
+                plt.gca().set_title(subtitle)
+
+                plt.imshow(image)
+
+            fig.savefig(img_save_dir + 'model-raw-rating-'+str(cur_fig) + '.png')
+    return
+
+
+def gen_img_collage_modifae_model_and_human():
+    return
 
 
 def gen_gt_stim_lst():
@@ -263,8 +309,8 @@ def gen_modifae_single_rating_stim_lst():
 
 if __name__ == '__main__':
     # gen_gt_stim_lst()
-    gen_modifae_single_rating_stim_lst()
-
+    # gen_modifae_single_rating_stim_lst()
+    gen_img_collage_modifae_model()
 
 
 
