@@ -88,8 +88,6 @@ def comp_group_correlation():
     for i, (rho, p) in enumerate(zip(rho_lst, p_lst)):
         if p < 0.05 and rho > 0.:
             qualified_sub_lst.append(i + 1)
-        else:
-            print(rho, p)
 
     print('consistent subject number = {}'.format(len(qualified_sub_lst)))
     data_df = likert_data[likert_data['subNum'].isin(qualified_sub_lst)]
@@ -104,10 +102,16 @@ def comp_group_correlation():
     gt_rating_df = gt_rating_df.sort_values(by=['imgNum'], ascending=True)
     gt_rating_df[trait_name] = gt_rating_df[trait_name].astype(np.float64)
     gt_df = gt_rating_df.groupby('imgNum', as_index=False)[trait_name].mean()
+    if sub_folder_prefix == 'modifae_':
+        gt_df[trait_name] = gt_df[trait_name] * 4 + 5
 
     def plot_scatter(human_rating, model_rating, flag):
         rho, p = spearmanr(human_rating, model_rating)
-        title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub num = {}, {}'.format(trait_name, rho, p, len(qualified_sub_lst), flag)
+        print('{}, rho={}, p={}'.format(flag, rho, p))
+        if flag == 'qualified data':
+            title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub num = {}, {}'.format(trait_name, rho, p, len(qualified_sub_lst), flag)
+        else:
+            title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub num = {}, {}'.format(trait_name, rho, p, total_sub_num, flag)
         plt.title(title_txt)
         plt.xlabel('Human rating')
         plt.ylabel('Model prediction')
@@ -118,7 +122,7 @@ def comp_group_correlation():
         plt.grid(color='gray', linestyle='--')
         plt.axes().set_aspect('equal')
         plt.scatter(human_rating, model_rating)
-        if flag == 'qualfied data':
+        if flag == 'qualified data':
             plt.savefig('./' + sub_folder_name + '/qualfied_sub_with_model.png')
         else:
             plt.savefig('./' + sub_folder_name + '/all_sub_with_model.png')
@@ -127,35 +131,19 @@ def comp_group_correlation():
     plot_scatter(human_rating=data_df['rating'], model_rating=gt_df[trait_name], flag='qualified data')
     plot_scatter(human_rating=all_data_df['rating'], model_rating=gt_df[trait_name], flag='all data')
 
-    # rho2, p2 = spearmanr(all_data_df['rating'], gt_df[trait_name])
-    # print rho2, p2, 'Use all data'
-    # title_txt = '{}: rho = {:.2f}, p = {:.2f}. sub = {}'.format(trait_name, rho2, p2, 15)
-    # plt.title(title_txt)
-    # plt.xlabel('Human rating')
-    # plt.ylabel('Model prediction')
-    #
-    # ## setting the limits on the x-axis and y-axis
-    # plt.xlim(1.5, 8.5)
-    # plt.ylim(1.5, 8.5)
-    # plt.grid(color='gray', linestyle='--')
-    # plt.axes().set_aspect('equal')
-    # plt.scatter(data_df['rating'], gt_df[trait_name])
-    # plt.savefig('./' + trait_name + '/all_sub_with_model.png')
-    # plt.show()
-
 
 if __name__ == '__main__':
 
-    trait_name = 'attractive'
+    trait_name = 'aggressive'
     sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
     sub_folder_name = sub_folder_prefix + trait_name
+    print sub_folder_name
 
     if sub_folder_prefix == '':
         gt_rating_name = '../../preparation_data/amt_gt_validation/' + trait_name + '_stim_lst.csv'
     else:
         gt_rating_name = '../../preparation_data/amt_modifAE_single_rating/' + trait_name + '_stim_lst.csv'
 
-    print sub_folder_name
     if not os.path.isdir('./' + sub_folder_name):
         os.makedirs('./' + sub_folder_name)
 

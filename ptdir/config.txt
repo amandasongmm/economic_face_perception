@@ -1,5 +1,5 @@
 [HIT Configuration]
-title = Aggressive Face Study
+title = Trustworthy Face Study
 description = Evaluate facial impression
 amt_keywords = Perception, Psychology
 lifetime = 2
@@ -13,7 +13,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///modifae_single_aggressive.db
+database_url = sqlite:///modifae_single_trustworthy.db
 table_name = turk
 
 [Server Parameters]
