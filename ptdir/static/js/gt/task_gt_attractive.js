@@ -48,7 +48,7 @@ function sleep(milliseconds) {
 
     var each_chuck_img_num = 10; // 10
     var require_or_not = true;
-    var iter_total = 10;  // 5 for 50 unique trials.
+    var iter_total = 1;  // 5 for 50 unique trials.
     var unique_trial_num = each_chuck_img_num * iter_total;
 
     var test_lst = all_lst.slice(0, unique_trial_num);
@@ -79,7 +79,7 @@ function sleep(milliseconds) {
 
     /* welcome message */
     var page_1 = '<h2>Welcome to the face attractiveness rating HIT!</h2> ' +
-		'<p>Your task is to guess <strong>how attractive</strong> a person looks in most people`s view.</p>' +
+		'<p>Your task is to guess <strong>how attractive</strong> a person looks in most people\'s view.</p>' +
         '<p> Rate each face on a <strong>1-9</strong> scale.</p>' +
     '<p>Try to make sense of what most people think and we will compare your response with others.</p>';
 
@@ -250,11 +250,11 @@ function sleep(milliseconds) {
 /*==========================================================================
  *                           empty face
  * ========================================================================= */
-var prompty_que = '<p>How attractive does this person look? Rate from 1-9</p>';
+var prompty_que = '<p>How attractive does this person look in most people\'s views? Rate from 1-9</p>';
 
-var labels = ["1 <br/>Not attractive at all",
+var labels = ["1 <br/><b>Extremely unattractive</b>",
              "2", "3", "4", "5", "6", "7", "8",
-             "9  <br/>Extremely attractive"];
+             "9  <br/><b>Extremely attractive</b>"];
 
 
 // function empty_face(second_round_or_not) {

@@ -13,7 +13,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///modifae_single_intelligent.db
+database_url = sqlite:///modifae_single_demo.db
 table_name = turk
 
 [Server Parameters]

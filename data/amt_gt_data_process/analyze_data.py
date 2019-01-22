@@ -1,8 +1,6 @@
 import json
 import pandas as pd
-import time
 import numpy as np
-import scipy.stats
 import matplotlib.pyplot as plt
 from scipy.stats import spearmanr
 import os
@@ -134,7 +132,7 @@ def comp_group_correlation():
 
 if __name__ == '__main__':
 
-    trait_name = 'trustworthy'
+    trait_name = 'intelligent'
     sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
     sub_folder_name = sub_folder_prefix + trait_name
     print sub_folder_name
