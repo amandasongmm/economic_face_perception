@@ -253,17 +253,30 @@ def gen_gt_stim_lst():
             f.write('];\n')
 
 
-def gen_modifae_single_rating_stim_lst():
+def gen_modifae_single_rating_stim_lst(flag):
+
+    if flag == 'new ratings':
+        print flag
+        img_dir_prefix = '../images/modifae_new_linspace/'
+        dst_dir_prefix = '/static/images/modifae_new_linspace/'  # '/static/images/modifAE_linspace/'
+        save_txt_prefix = '../../../preparation_data/amt_modifae_new_single/'
+
+    else:
+        print 'Old single ratings.'
+        img_dir_prefix = '../images/modifAE_linspace/'
+        dst_dir_prefix = '/static/images/modifAE_linspace/'
+        save_txt_prefix = '../../../preparation_data/amt_modifAE_single_rating/'
 
     trait_lst = ['attractive', 'aggressive', 'trustworthy', 'intelligent']
 
     n_unique_num = 80
     n_rep_num = 20
+    # gt_num = 2
 
     for trait in trait_lst:
         print trait
 
-        img_dir = '../images/modifAE_linspace/' + trait + '/'
+        img_dir = img_dir_prefix + trait + '/'
         img_lst = [f for f in listdir(img_dir) if isfile(join(img_dir, f))]
 
         #todo: sample n_unique elements from the list, then randomly repeat n_rep_num of them.
@@ -292,11 +305,11 @@ def gen_modifae_single_rating_stim_lst():
         stim_df = stim_df.sample(frac=1, random_state=1)
         print stim_df['Filename'].nunique()
 
-        save_csv_name = '../../../preparation_data/amt_modifAE_single_rating/' + trait + '_stim_lst.csv'
+        save_csv_name = save_txt_prefix + trait + '_stim_lst.csv'
         stim_df.to_csv(save_csv_name)
 
-        dst_dir = '/static/images/modifAE_linspace/' + trait + '/'
-        save_txt_name = '../../../preparation_data/amt_modifAE_single_rating/'+ trait+'.txt'
+        dst_dir = dst_dir_prefix + trait + '/'
+        save_txt_name = save_txt_prefix + trait+'.txt'
 
         with open(save_txt_name, 'w') as f:
             f.write("var all_lst = [\n")
@@ -310,15 +323,6 @@ def gen_modifae_single_rating_stim_lst():
 if __name__ == '__main__':
     # gen_gt_stim_lst()
     # gen_modifae_single_rating_stim_lst()
-    gen_img_collage_modifae_model()
-
-
-
-
-
-
-
-
-
-
-
+    # gen_img_collage_modifae_model()
+    gen_modifae_single_rating_stim_lst('new ratings')
+    print('Done!')
