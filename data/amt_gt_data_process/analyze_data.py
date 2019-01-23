@@ -100,7 +100,8 @@ def comp_group_correlation():
     gt_rating_df = gt_rating_df.sort_values(by=['imgNum'], ascending=True)
     gt_rating_df[trait_name] = gt_rating_df[trait_name].astype(np.float64)
     gt_df = gt_rating_df.groupby('imgNum', as_index=False)[trait_name].mean()
-    if sub_folder_prefix == 'modifae_':
+
+    if sub_folder_prefix == 'modifae_' or sub_folder_prefix == 'modifae_new_':
         gt_df[trait_name] = gt_df[trait_name] * 4 + 5
 
     def plot_scatter(human_rating, model_rating, flag):
@@ -132,7 +133,7 @@ def comp_group_correlation():
 
 if __name__ == '__main__':
 
-    trait_name = 'attractive'
+    trait_name = 'aggressive'
     # sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
     sub_folder_prefix = 'modifae_new_'  # for gt data, sub_folder_name = ''
     sub_folder_name = sub_folder_prefix + trait_name
@@ -145,7 +146,6 @@ if __name__ == '__main__':
 
     else:
         gt_rating_name = '../../preparation_data/amt_modifae_new_single/' + trait_name + '_stim_lst.csv'
-
 
     if not os.path.isdir('./' + sub_folder_name):
         os.makedirs('./' + sub_folder_name)
