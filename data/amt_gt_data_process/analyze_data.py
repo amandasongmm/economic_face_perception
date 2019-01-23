@@ -132,15 +132,20 @@ def comp_group_correlation():
 
 if __name__ == '__main__':
 
-    trait_name = 'intelligent'
-    sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
+    trait_name = 'attractive'
+    # sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
+    sub_folder_prefix = 'modifae_new_'  # for gt data, sub_folder_name = ''
     sub_folder_name = sub_folder_prefix + trait_name
     print sub_folder_name
 
     if sub_folder_prefix == '':
         gt_rating_name = '../../preparation_data/amt_gt_validation/' + trait_name + '_stim_lst.csv'
-    else:
+    elif sub_folder_prefix == 'modifae_':
         gt_rating_name = '../../preparation_data/amt_modifAE_single_rating/' + trait_name + '_stim_lst.csv'
+
+    else:
+        gt_rating_name = '../../preparation_data/amt_modifae_new_single/' + trait_name + '_stim_lst.csv'
+
 
     if not os.path.isdir('./' + sub_folder_name):
         os.makedirs('./' + sub_folder_name)
