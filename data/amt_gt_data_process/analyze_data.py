@@ -133,7 +133,7 @@ def comp_group_correlation():
 
 if __name__ == '__main__':
 
-    trait_name = 'aggressive'
+    trait_name = 'trustworthy'
     # sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
     sub_folder_prefix = 'modifae_new_'  # for gt data, sub_folder_name = ''
     sub_folder_name = sub_folder_prefix + trait_name
