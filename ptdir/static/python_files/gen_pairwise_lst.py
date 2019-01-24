@@ -96,6 +96,9 @@ def gen_modifae_pairwise_lst():
 
             save_csv_name = prep_data_dir + cur_trait + '-' + cur_pair_level + '-stim-lst.csv'
             stim_df.to_csv(save_csv_name, index=False)
+            # todo:
+            # for some reason, when saved as csv, the order of the columns got changed. Find out why.
+
 
             # write the stim_lst into a txt file and then copy and paste into a javascript file.
 

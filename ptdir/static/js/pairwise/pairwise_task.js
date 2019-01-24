@@ -69,11 +69,11 @@ var StroopExperiment = function() {
 		switch (keyCode) {
 			case 65:
 				// "A"
-				response="1";
+				response="left";
 				break;
 			case 66:
 				// "B"
-				response="0";
+				response="right";
 				break;
 			default:
 				response = "";
@@ -81,17 +81,18 @@ var StroopExperiment = function() {
 		}
 		if (response.length>0) {
 			listening = false;
-			var hit = response == stim[4];
+			// var hit = response == stim[4];
 			var rt = new Date().getTime() - wordon;
 
 			psiTurk.recordTrialData({'phase':"TEST",
                                      'im1':stim[0],
                                      'im2':stim[1],
-                                     'tasktype':stim[2],
+                                     'low_first':stim[2],
                                      'repeat':stim[3],
-				                     'low_first':stim[4],
-                                     'hit':hit,
-                                     'rt':rt}
+				                     'task_type':stim[4],
+                                     // 'hit':hit,
+                                     'rt':rt,
+									 'response': response}
                                    );
 			remove_word();
 			next();
