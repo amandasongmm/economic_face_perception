@@ -14,19 +14,15 @@ var mycounterbalance = counterbalance;  // they tell you which condition you hav
 // All pages to be loaded
 var pages = [
 	"instructions/instruct-1.html",
-	"instructions/instruct-2.html",
-	"instructions/instruct-3.html",
 	"instructions/instruct-ready.html",
-	"stage.html",
-	"postquestionnaire.html"
+	"postquestionnaire.html",
+	"stage.html"
 ];
 
 psiTurk.preloadPages(pages);
 
 var instructionPages = [ // add as a list as many pages as you like
 	"instructions/instruct-1.html",
-	"instructions/instruct-2.html",
-	"instructions/instruct-3.html",
 	"instructions/instruct-ready.html"
 ];
 
@@ -129,9 +125,21 @@ var StroopExperiment = function() {
 };
 
 
+
 /****************
 * Questionnaire *
 ****************/
+
+
+
+
+		// psiTurk.saveData({
+		// 	success: function() {
+		// 		psiTurk.completeHIT();
+		// 	}
+		// });
+
+
 
 var Questionnaire = function() {
 
@@ -159,17 +167,23 @@ var Questionnaire = function() {
 		document.body.innerHTML = "<h1>Trying to resubmit...</h1>";
 		reprompt = setTimeout(prompt_resubmit, 10000);
 
+
 		psiTurk.saveData({
 			success: function() {
-			    clearInterval(reprompt);
-                psiTurk.computeBonus('compute_bonus', function(){
-                	psiTurk.completeHIT(); // when finished saving compute bonus, the quit
-                });
-
-
-			},
-			error: prompt_resubmit
+				psiTurk.completeHIT();
+            }
 		});
+		// psiTurk.saveData({
+		// 	success: function() {
+		// 	    clearInterval(reprompt);
+         //        psiTurk.computeBonus('compute_bonus', function(){
+         //        	psiTurk.completeHIT(); // when finished saving compute bonus, the quit
+         //        });
+        //
+        //
+		// 	},
+		// 	error: prompt_resubmit
+		// });
 	};
 
 	// Load the questionnaire snippet
@@ -178,13 +192,19 @@ var Questionnaire = function() {
 
 	$("#next").click(function () {
 	    record_responses();
-	    psiTurk.saveData({
-            success: function(){
-                psiTurk.computeBonus('compute_bonus', function() {
-                	psiTurk.completeHIT(); // when finished saving compute bonus, the quit
-                });
-            },
-            error: prompt_resubmit});
+
+	    		psiTurk.saveData({
+			success: function() {
+				psiTurk.completeHIT();
+			}
+		});
+	    // psiTurk.saveData({
+         //    success: function(){
+         //        psiTurk.computeBonus('compute_bonus', function() {
+         //        	psiTurk.completeHIT(); // when finished saving compute bonus, the quit
+         //        });
+         //    },
+         //    error: prompt_resubmit});
 	});
 
 
