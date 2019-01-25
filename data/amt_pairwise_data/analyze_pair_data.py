@@ -10,9 +10,9 @@ import shutil
 
 if __name__ == '__main__':
 
-    task_type = 'stargan'
+    task_type = 'modifae'
     trait_name = 'attractive'
-    high_low_type = 'low-high'
+    high_low_type = 'mid-high'
 
     # move experiment data from pt_dir to a specific folder specified by task config params.
 

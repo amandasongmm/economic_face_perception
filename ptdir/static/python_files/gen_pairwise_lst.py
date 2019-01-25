@@ -204,5 +204,5 @@ def gen_stargan_pairwise_lst():
 
 
 if __name__ == '__main__':
-    # gen_modifae_pairwise_lst()
-    gen_stargan_pairwise_lst()
+    gen_modifae_pairwise_lst()
+    # gen_stargan_pairwise_lst()
