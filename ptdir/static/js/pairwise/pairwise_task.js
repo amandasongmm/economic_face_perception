@@ -14,6 +14,7 @@ var mycounterbalance = counterbalance;  // they tell you which condition you hav
 // All pages to be loaded
 var pages = [
 	"instructions/instruct-1.html",
+	"instructions/instruct-2.html",
 	"instructions/instruct-ready.html",
 	"postquestionnaire.html",
 	"stage.html"
@@ -23,6 +24,7 @@ psiTurk.preloadPages(pages);
 
 var instructionPages = [ // add as a list as many pages as you like
 	"instructions/instruct-1.html",
+	"instructions/instruct-2.html",
 	"instructions/instruct-ready.html"
 ];
 
@@ -88,8 +90,9 @@ var StroopExperiment = function() {
                                      'im1':stim[0],
                                      'im2':stim[1],
                                      'low_first':stim[2],
-                                     'repeat':stim[3],
-				                     'task_type':stim[4],
+									 'pair_ind': stim[3],
+                                     'repeat':stim[4],
+				                     'task_type':stim[5],
                                      // 'hit':hit,
                                      'rt':rt,
 									 'response': response}

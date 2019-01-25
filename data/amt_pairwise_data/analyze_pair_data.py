@@ -36,8 +36,10 @@ if __name__ == '__main__':
     # parse trialdata.csv into pair_data.csv, more organized, for further analysis.
     pair_data_csv = sub_folder_name + 'pair_data.csv'
     if os.path.exists(pair_data_csv):
+        print('Retrieve pairwise data...')
         pair_data = pd.read_csv(pair_data_csv)
     else:
+        print('Parsing pairwise data...')
         pair_data = pd.DataFrame(columns=['subId', 'rt', 'im1', 'im2', 'response', 'low_first', 'repeat', 'task_type', 'correct'])
         trial_data = pd.read_csv(trial_csv, names=['subId', 'trialNum', 'trialId', 'jsonStr'], header=None)
 
@@ -66,34 +68,34 @@ if __name__ == '__main__':
 
         pair_data.to_csv(pair_data_csv)
 
-    # compute overall modifae and gt accuracy, individual consistency, and image-pairwise accuracy.
-    sub_num_dict = {}
-    sub_counter = 1
-    for sub_id in pair_data['subId']:
-        if sub_id not in sub_num_dict:
-            sub_num_dict[sub_id] = sub_counter
-            sub_counter += 1
-
-    pair_data['subNum'] = pair_data['subId'].map(sub_num_dict)
-
-    img_num_dict = {}
-    img_counter = 0
-
-    for im1_name in pair_data['im1']:
-        # im1_name = os.path.splitext(os.path.basename(im1))[0]
-        # im1_splits = im1_name.split('-')
-        #
-        # if len(im1_splits) == 3:
-        #     # gt-image
-        #     im1_name = im1_splits[-1]
-        # else:
-        #     im1_name = im1_name.split('_')[0]
-
-        if im1_name not in img_num_dict:
-            img_num_dict[im1_name] = img_counter
-            img_counter += 1
-
-    pair_data['im1_num'] = pair_data['im1'].map(img_num_dict)
+    # # compute overall modifae and gt accuracy, individual consistency, and image-pairwise accuracy.
+    # sub_num_dict = {}
+    # sub_counter = 1
+    # for sub_id in pair_data['subId']:
+    #     if sub_id not in sub_num_dict:
+    #         sub_num_dict[sub_id] = sub_counter
+    #         sub_counter += 1
+    #
+    # pair_data['subNum'] = pair_data['subId'].map(sub_num_dict)
+    #
+    # img_num_dict = {}
+    # img_counter = 0
+    #
+    # for im1_name in pair_data['im1']:
+    #     # im1_name = os.path.splitext(os.path.basename(im1))[0]
+    #     # im1_splits = im1_name.split('-')
+    #     #
+    #     # if len(im1_splits) == 3:
+    #     #     # gt-image
+    #     #     im1_name = im1_splits[-1]
+    #     # else:
+    #     #     im1_name = im1_name.split('_')[0]
+    #
+    #     if im1_name not in img_num_dict:
+    #         img_num_dict[im1_name] = img_counter
+    #         img_counter += 1
+    #
+    # pair_data['im1_num'] = pair_data['im1'].map(img_num_dict)
 
 
 
