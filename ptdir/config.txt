@@ -1,5 +1,5 @@
 [HIT Configuration]
-title = Face Aggressive Pair Study (S)
+title = Face Aggressive Pair Study (M-L-M)
 description = Evaluate facial impression
 amt_keywords = Perception, Psychology
 lifetime = 2
@@ -13,7 +13,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///stargan_aggressive.db
+database_url = sqlite:///modifae_aggressive_low_mid.db
 table_name = turk
 
 [Server Parameters]
@@ -31,4 +31,3 @@ num_counters = 1
 
 [Shell Parameters]
 launch_in_sandbox_mode = true
-
