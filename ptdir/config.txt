@@ -1,5 +1,5 @@
 [HIT Configuration]
-title = Face Trustworthy Pair Study (S)
+title = Face Trustworthy Pair Study (M-L-H)
 description = Evaluate facial impression
 amt_keywords = Perception, Psychology
 lifetime = 2
