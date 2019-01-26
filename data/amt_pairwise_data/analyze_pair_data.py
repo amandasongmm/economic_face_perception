@@ -10,7 +10,7 @@ import shutil
 
 if __name__ == '__main__':
 
-    task_type = 'stargan'
+    task_type = 'modifae'
     trait_name = 'trustworthy'
     high_low_type = 'low-high'
 
