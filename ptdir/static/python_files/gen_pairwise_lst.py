@@ -11,7 +11,9 @@ from os import listdir
 import random
 
 
-trait_lst = ['attractive', 'aggressive', 'trustworthy', 'intelligent']
+# trait_lst = ['attractive', 'aggressive', 'trustworthy', 'intelligent']
+
+trait_lst = ['trustworthy', 'intelligent']
 
 
 def gen_modifae_pairwise_lst():
@@ -20,7 +22,7 @@ def gen_modifae_pairwise_lst():
     # Each lst contains 70 unique pairs, 20 repetitions, and 10 gt pairs.
 
     pair_levels = ['low-high', 'low-mid', 'mid-high']
-    low_postfix, mid_postfix, high_postfix = '_-0.75.png', '_0.0.png', '_0.75.png'
+
     gt_img_dir = '/static/images/gt_pairwise/'
     prep_data_dir = '../../../preparation_data/amt_modifae_pairwise/'
 
@@ -29,6 +31,11 @@ def gen_modifae_pairwise_lst():
     n_gt_num = 10
 
     for cur_trait in trait_lst:
+        if cur_trait == 'trustworthy' or cur_trait == 'intelligent':
+            low_postfix, mid_postfix, high_postfix = '_-0.5.png', '_0.0.png', '_0.5.png'
+            print 'special low-post', cur_trait
+        else:
+            low_postfix, mid_postfix, high_postfix = '_-0.75.png', '_0.0.png', '_0.75.png'
 
         cur_im_dir = '../images/modifae_pairwise/' + cur_trait + '/'
         git_im_dir = '/static/images/modifae_pairwise/' + cur_trait + '/'
