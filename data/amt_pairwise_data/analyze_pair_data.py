@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     task_type = 'modifae'
     trait_name = 'intelligent'
-    high_low_type = 'low-high'
+    high_low_type = 'low-mid'
 
     # move experiment data from pt_dir to a specific folder specified by task config params.
 
