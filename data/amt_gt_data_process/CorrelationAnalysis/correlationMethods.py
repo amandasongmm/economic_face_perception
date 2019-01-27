@@ -2,13 +2,15 @@ import pandas as pd
 from correlationMethods import *
 import matplotlib.pyplot as plt
 import numpy as np
-import re
+from collections import Counter
 from scipy.stats import pearsonr as corr
 
 celeb = pd.read_csv("celeb_ratings.csv")
-def calcSelfConsistency(df):
+
+def calcSelfConsistency(trait, prnt=False):
     print("Consistency with self")
     corrList = []
+    df = pd.read_csv("../" + trait + "/likert_data.csv")
     for sub in sorted(df.subId.unique()):
         # find the imgNames that repeat
         subdf = df.loc[df["subId"] == sub]
@@ -20,10 +22,12 @@ def calcSelfConsistency(df):
         second = trials[1::2]
         # Pearson + output
         c = corr(first, second)
-        print("SubId: " + sub)
-        print("\t Pearson Cor: ", c[0])
         corrList.append(c[0])
-        print("\t p-val: ", c[1])
+        if prnt:
+            print("SubId: " + sub)
+            print("\t Pearson Cor: ", c[0])
+            print("\t p-val: ", c[1])
+        # Show the hist
     return corrList
 def calcGroupConsistency(df):
     print("Consistency with group")
@@ -39,6 +43,7 @@ def calcGroupConsistency(df):
         corrList.append(c[0])
         print("\t p-val: ", c[1])
     return corrList
+
 def calcrHumrMacConsistency(df, attribute):
     print("Attribute Correlation: ")
     f = celeb[["Filename", "aggressive","attractive", "intelligent", "trustworthy"]]
