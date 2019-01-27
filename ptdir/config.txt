@@ -1,5 +1,5 @@
 [HIT Configuration]
-title = Face Trustworthy Pair Study (M-M-H)
+title = Face Intelligent Pair Study (M-L-H)
 description = Evaluate facial impression
 amt_keywords = Perception, Psychology
 lifetime = 2
@@ -13,7 +13,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///modifae_trustworthy_mid_high.db
+database_url = sqlite:///modifae_intelligent_low_high.db
 table_name = turk
 
 [Server Parameters]

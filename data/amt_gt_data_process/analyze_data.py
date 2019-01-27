@@ -131,8 +131,7 @@ def comp_group_correlation():
     plot_scatter(human_rating=all_data_df['rating'], model_rating=gt_df[trait_name], flag='all data')
 
 
-if __name__ == '__main__':
-
+def comp_for_one_exp():
     trait_name = 'intelligent'
     # sub_folder_prefix = 'modifae_'  # for gt data, sub_folder_name = ''
     sub_folder_prefix = 'modifae_new_'  # for gt data, sub_folder_name = ''
@@ -164,3 +163,47 @@ if __name__ == '__main__':
         shutil.move("../../ptdir/" + db_file_name, "./" + sub_folder_name + '/' + db_file_name)
 
     comp_group_correlation()
+    return
+
+
+def ground_truth_correlation_summary():
+    return
+
+
+if __name__ == '__main__':
+
+    trait_lst = ['attractive', 'aggressive', 'trustworthy', 'intelligent']
+    sub_folder_prefix = ''
+    # sub_folder_prefix = '' # for gt data
+    # sub_folder_prefix = 'modifae_'
+    # sub_folder_prefix = 'modifae_new_'
+
+    for trait_name in trait_lst:
+
+        sub_folder_name = sub_folder_prefix + trait_name
+        print sub_folder_name
+
+        if sub_folder_prefix == '':
+            gt_rating_name = '../../preparation_data/amt_gt_validation/' + trait_name + '_stim_lst.csv'
+        elif sub_folder_prefix == 'modifae_':
+            gt_rating_name = '../../preparation_data/amt_modifAE_single_rating/' + trait_name + '_stim_lst.csv'
+        else:
+            gt_rating_name = '../../preparation_data/amt_modifae_new_single/' + trait_name + '_stim_lst.csv'
+
+        if not os.path.isdir('./' + sub_folder_name):
+            os.makedirs('./' + sub_folder_name)
+
+        likert_csv = './' + sub_folder_name + '/likert_data.csv'
+        trial_csv = './' + sub_folder_name + '/trialdata.csv'
+
+        if not os.path.isfile(trial_csv):
+            shutil.move("../../ptdir/trialdata.csv", "./" + sub_folder_name + '/trialdata.csv')
+            shutil.move("../../ptdir/eventdata.csv", "./" + sub_folder_name + '/eventdata.csv')
+            shutil.move("../../ptdir/questiondata.csv", "./" + sub_folder_name + '/questiondata.csv')
+            db_file_name = []
+            for cur_file in os.listdir("../../ptdir/"):
+                if cur_file.endswith(".db"):
+                    db_file_name = cur_file
+            shutil.move("../../ptdir/" + db_file_name, "./" + sub_folder_name + '/' + db_file_name)
+
+        comp_group_correlation()
