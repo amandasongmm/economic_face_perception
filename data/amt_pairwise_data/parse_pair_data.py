@@ -11,8 +11,8 @@ import shutil
 if __name__ == '__main__':
 
     task_type = 'modifae'
-    trait_name = 'intelligent'
-    high_low_type = 'mid-high'
+    trait_name = 'attractive'
+    high_low_type = 'low-mid'
 
     # move experiment data from pt_dir to a specific folder specified by task config params.
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                 pair_data.loc[pair_counter, 'response'] = json_dict['response']
                 pair_data.loc[pair_counter, 'low_first'] = json_dict['low_first']
                 pair_data.loc[pair_counter, 'repeat'] = json_dict['repeat']
-                pair_data.loc[pair_counter, 'task_type'] = json_dict['task_type']
+                # pair_data.loc[pair_counter, 'task_type'] = json_dict['task_type']
                 if json_dict['low_first'] == 1:
                     correct_answer = 'right'
                 else:
@@ -96,72 +96,3 @@ if __name__ == '__main__':
     #         img_counter += 1
     #
     # pair_data['im1_num'] = pair_data['im1'].map(img_num_dict)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
