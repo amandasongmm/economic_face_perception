@@ -15,7 +15,9 @@ import random
 
 # trait_lst = ['trustworthy', 'intelligent']
 
-trait_lst = ['aggressive_new']
+# trait_lst = ['aggressive_new']
+
+trait_lst = ['aggressive_new', 'attractive_new', 'trustworthy_new', 'intelligent_new']
 
 
 def gen_modifae_pairwise_lst():
@@ -212,82 +214,102 @@ def gen_stargan_pairwise_lst():
             f.write('];\n')
 
 
-def gen_modifae_new_pair_aggressive():
-    trait = 'aggressive_new'
-    trait_abr = 'aggressive'
-    pair_level = 'mid-high'
-    gt_img_dir = '/static/images/gt_pairwise/'
-    prep_data_dir = '../../../preparation_data/amt_modifae_pairwise/'
+def gen_modifae_new_pair():
 
-    n_unique_num = 80
-    n_rep_num = 10
-    n_gt_num = 10
-    low_post_fix = '_-1.png'
-    mid_post_fix = '_0.0.png'
-    high_post_fix = '_1.png'
+    for trait in trait_lst:
 
-    cur_im_dir = '../images/modifae_pairwise/' + trait + '/'
-    git_im_dir = '/static/images/modifae_pairwise/' + trait + '/'
+        trait_abr = trait.split('_')[0]
+        pair_levels = ['low-mid', 'mid-high', 'low-high']
 
-    cur_dir_all_file_lst = os.listdir(cur_im_dir)
+        for pair_level in pair_levels:
 
-    cur_dir_all_uniq_lst = set([i.split('_')[0] for i in cur_dir_all_file_lst])
+            print trait, pair_level
 
+            gt_img_dir = '/static/images/gt_pairwise/'
+            prep_data_dir = '../../../preparation_data/amt_modifae_pairwise/'
 
-    select_file_lst = list(cur_dir_all_uniq_lst)[:n_unique_num]
+            n_unique_num = 80
+            n_rep_num = 10
+            n_gt_num = 10
+            low_post_fix = '_-1.png'
+            mid_post_fix = '_0.0.png'
+            high_post_fix = '_1.png'
 
-    im1_post_fix, im2_post_fix = mid_post_fix, high_post_fix
-    gt_im1_lst = [gt_img_dir + trait_abr + '-mid-' + str(i) + '.png' for i in range(0, n_gt_num)]
-    gt_im2_lst = [gt_img_dir + trait_abr + '-high-' + str(i) + '.png' for i in range(0, n_gt_num)]
-    im1_lst = [git_im_dir + i + im1_post_fix for i in select_file_lst]
-    im2_lst = [git_im_dir + i + im2_post_fix for i in select_file_lst]
+            cur_im_dir = '../images/modifae_pairwise/' + trait + '/'
+            git_im_dir = '/static/images/modifae_pairwise/' + trait + '/'
 
-    stim_df = pd.DataFrame({'im1': im1_lst,
-                            'im2': im2_lst,
-                            'task_type': 'modifae',
-                            'repeat': 0,
-                            'low_first': 1,
-                            'pair_ind': range(0, n_unique_num)})
+            cur_dir_all_file_lst = os.listdir(cur_im_dir)
 
-    stim_repeat = stim_df.sample(n_rep_num)
-    stim_repeat['repeat'] = 1
+            cur_dir_all_uniq_lst = set([i.split('_')[0] for i in cur_dir_all_file_lst])
 
-    gt_df = pd.DataFrame({'im1': gt_im1_lst,
-                          'im2': gt_im2_lst,
-                          'task_type': 'gt',
-                          'repeat': 0,
-                          'low_first': 1,
-                          'pair_ind': range(n_unique_num, n_unique_num + n_gt_num)})
+            select_file_lst = list(cur_dir_all_uniq_lst)[:n_unique_num]
 
-    merged_df = pd.concat([stim_df, stim_repeat, gt_df], ignore_index=True)
+            if pair_level == 'mid-high':
+                im1_post_fix, im2_post_fix = mid_post_fix, high_post_fix
+                gt_im1_lst = [gt_img_dir + trait_abr + '-mid-' + str(i) + '.png' for i in range(0, n_gt_num)]
+                gt_im2_lst = [gt_img_dir + trait_abr + '-high-' + str(i) + '.png' for i in range(0, n_gt_num)]
+            elif pair_level == 'low-mid':
+                im1_post_fix, im2_post_fix = low_post_fix, mid_post_fix
+                gt_im1_lst = [gt_img_dir + trait_abr + '-low-' + str(i) + '.png' for i in range(0, n_gt_num)]
+                gt_im2_lst = [gt_img_dir + trait_abr + '-mid-' + str(i) + '.png' for i in range(0, n_gt_num)]
+            elif pair_level == 'low-high':
+                im1_post_fix, im2_post_fix = low_post_fix, mid_post_fix
+                gt_im1_lst = [gt_img_dir + trait_abr + '-low-' + str(i) + '.png' for i in range(0, n_gt_num)]
+                gt_im2_lst = [gt_img_dir + trait_abr + '-high-' + str(i) + '.png' for i in range(0, n_gt_num)]
+            else:
+                print('Error')
+                im1_post_fix = ''
+                im2_post_fix = ''
 
-    df = merged_df.sample(frac=1, random_state=1)
+            im1_lst = [git_im_dir + i + im1_post_fix for i in select_file_lst]
+            im2_lst = [git_im_dir + i + im2_post_fix for i in select_file_lst]
 
-    rand_lst = [random.randint(0, 1) for i in range(0, len(df))]
-    for ind, row in df.iterrows():
-        im1_name = row['im1']
-        im2_name = row['im2']
+            stim_df = pd.DataFrame({'im1': im1_lst,
+                                    'im2': im2_lst,
+                                    'task_type': 'modifae',
+                                    'repeat': 0,
+                                    'low_first': 1,
+                                    'pair_ind': range(0, n_unique_num)})
 
-        if rand_lst[ind] == 0:
-            df['im1'].loc[ind] = im2_name
-            df['im2'].loc[ind] = im1_name
-            df['low_first'].loc[ind] = 0
+            stim_repeat = stim_df.sample(n_rep_num)
+            stim_repeat['repeat'] = 1
 
-    save_csv_name = prep_data_dir + trait + '-' + pair_level + '-stim-lst.csv'
-    df.to_csv(save_csv_name, index=False)
+            gt_df = pd.DataFrame({'im1': gt_im1_lst,
+                                  'im2': gt_im2_lst,
+                                  'task_type': 'gt',
+                                  'repeat': 0,
+                                  'low_first': 1,
+                                  'pair_ind': range(n_unique_num, n_unique_num + n_gt_num)})
 
-    # write the df into txt format. list of lists.
-    test_lst = []
-    for ind, row in df.iterrows():
-        test_lst.append(row.values.tolist())
+            merged_df = pd.concat([stim_df, stim_repeat, gt_df], ignore_index=True)
 
-    save_txt_name = prep_data_dir + trait + '-' + pair_level + '.txt'
+            df = merged_df.sample(frac=1, random_state=1)
 
-    with open(save_txt_name, 'w') as f:
-        f.write("var stims = [\n")
-        for cur_line in test_lst:
-            f.write("{},\n".format(cur_line))
-        f.write('];\n')
+            rand_lst = [random.randint(0, 1) for i in range(0, len(df))]
+            for ind, row in df.iterrows():
+                im1_name = row['im1']
+                im2_name = row['im2']
+
+                if rand_lst[ind] == 0:
+                    df['im1'].loc[ind] = im2_name
+                    df['im2'].loc[ind] = im1_name
+                    df['low_first'].loc[ind] = 0
+
+            save_csv_name = prep_data_dir + trait + '-' + pair_level + '-stim-lst.csv'
+            df.to_csv(save_csv_name, index=False)
+
+            # write the df into txt format. list of lists.
+            test_lst = []
+            for ind, row in df.iterrows():
+                test_lst.append(row.values.tolist())
+
+            save_txt_name = prep_data_dir + trait + '-' + pair_level + '.txt'
+
+            with open(save_txt_name, 'w') as f:
+                f.write("var stims = [\n")
+                for cur_line in test_lst:
+                    f.write("{},\n".format(cur_line))
+                f.write('];\n')
 
     return
 
@@ -295,4 +317,4 @@ def gen_modifae_new_pair_aggressive():
 if __name__ == '__main__':
     # gen_modifae_pairwise_lst()
     # gen_stargan_pairwise_lst()
-    gen_modifae_new_pair_aggressive()
+    gen_modifae_new_pair()
