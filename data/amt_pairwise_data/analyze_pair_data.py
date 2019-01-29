@@ -559,7 +559,7 @@ def comp_modifae_mid_high():
 def comp_modifae_new():
 
     task_type = 'modifae'
-    high_low_type = 'low-high'
+    high_low_type = 'mid-high'
     trait_lst = ['aggressive_new']
 
     standard_trial_num = 100
@@ -673,12 +673,80 @@ def comp_modifae_new():
         print('cur trait = {}, task acc = {:2f}, gt acc = {:.2f}'.format(trait_name, task_acc, gt_acc))
     return
 
+
+def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
+
+    task_type = 'modifae'
+    trait_name = 'aggressive_new'
+    standard_trial_num = 100
+    gt_acc_threshold = 0.50
+
+    print('trait = {}, type = {}, gt threshold = {}'.format(trait_name, high_low_type, gt_acc_threshold))
+
+    pair_data_csv = './' + task_type + '/' + trait_name + '-' + high_low_type + '/pair_data.csv'
+    pair_data = pd.read_csv(pair_data_csv, index_col=None)
+
+    # convert subId to subNum
+    sub_num_dict = {}
+    sub_counter = 1
+    for sub_id in pair_data['subId']:
+        if sub_id not in sub_num_dict:
+            sub_num_dict[sub_id] = sub_counter
+            sub_counter += 1
+    pair_data['subNum'] = pair_data['subId'].map(sub_num_dict)
+
+    #
+
+    valid_task_correct = 0
+    valid_task_count = 0
+
+    valid_gt_correct = 0
+    valid_gt_count = 0
+
+    bad_sub_lst = []
+
+    for cur_sub_num in range(1, pair_data['subNum'].nunique() + 1):
+
+        cur_sub_data = pair_data[pair_data['subNum'] == cur_sub_num]
+        cur_sub_total = len(cur_sub_data)
+
+        if cur_sub_total != standard_trial_num:
+            print('cur sub total trial num = {}, removed from the data.'.format(cur_sub_num))
+            bad_sub_lst.append(cur_sub_num)
+        else:
+            cur_sub_task = cur_sub_data[cur_sub_data['task_type'] == task_type]
+            cur_sub_gt = cur_sub_data[cur_sub_data['task_type'] == 'gt']
+
+            cur_sub_task_acc = (cur_sub_task['correct'] == True).sum() / len(cur_sub_task)
+            cur_sub_gt_acc = (cur_sub_gt['correct'] == True).sum() / len(cur_sub_gt)
+            print('cur sub: {}, task acc: {:.2f}, gt acc: {:.2f}'.format(cur_sub_num, cur_sub_task_acc, cur_sub_gt_acc))
+
+            if cur_sub_gt_acc > gt_acc_threshold:
+                valid_gt_correct += (cur_sub_gt['correct'] == True).sum()
+                valid_gt_count += len(cur_sub_gt)
+
+                valid_task_correct += (cur_sub_task['correct'] == True).sum()
+                valid_task_count += len(cur_sub_task)
+            else:
+                bad_sub_lst.append(cur_sub_num)
+
+    task_acc = valid_task_correct / valid_task_count
+    gt_acc = valid_gt_correct / valid_gt_count
+
+    print('cur trait = {}, task acc = {}, gt acc = {}, total valid task trials = {}'.format(trait_name, task_acc, gt_acc, valid_task_count))
+    print 'bad subject ind', bad_sub_lst
+
+    return
+
+
+
+
 # comp_stargan()
 # comp_modifae()
 # comp_modifae_low_mid()
 # comp_modifae_mid_high()
-comp_modifae_new()
-
+# comp_modifae_new()
+comp_modifae_new_with_correct_data_format()
 
 
 
