@@ -74,7 +74,7 @@ def old_data():
 def new_data():
     task_type = 'modifae'
     trait_name = 'attractive_new'
-    high_low_type = 'mid-high'
+    high_low_type = 'low-mid'
 
     # move experiment data from pt_dir to a specific folder specified by task config params.
 

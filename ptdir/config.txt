@@ -1,8 +1,8 @@
 [HIT Configuration]
-title = Face Attractive Pair Study (M-N-L-M)
+title = Face Attractive Pair Study (M-N-L-H)
 description = Evaluate facial impression
 amt_keywords = Perception, Psychology
-lifetime = 2
+lifetime = 1
 us_only = true
 approve_requirement = 95
 contact_email_on_error = face4fun@gmail.com
@@ -13,7 +13,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = sqlite:///modifae_attractive_new_low_mid.db
+database_url = sqlite:///modifae_attractive_new_low_high.db
 table_name = turk
 
 [Server Parameters]

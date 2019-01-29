@@ -2,6 +2,7 @@ from __future__ import division
 import pandas as pd
 import os
 import re
+from scipy.stats import binom_test
 
 
 def comp_stargan():
@@ -674,10 +675,10 @@ def comp_modifae_new():
     return
 
 
-def comp_modifae_new_with_correct_data_format(high_low_type='mid-high'):
+def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
 
     task_type = 'modifae'
-    trait_name = 'attractive_new'
+    trait_name = 'aggressive_new'
     standard_trial_num = 100
     gt_acc_threshold = 0.60
 
@@ -733,9 +734,11 @@ def comp_modifae_new_with_correct_data_format(high_low_type='mid-high'):
     task_acc = valid_task_correct / valid_task_count
     gt_acc = valid_gt_correct / valid_gt_count
 
-    print('cur trait = {}, task acc = {}, gt acc = {}, total valid task trials = {}, gc threshold={}'.format(
+    print('cur trait = {}, task acc = {:.2f}, gt acc = {:.2f}, valid trials = {}, gc threshold={:.2f}'.format(
         trait_name, task_acc, gt_acc, valid_task_count, gt_acc_threshold))
-    print 'bad subject ind', bad_sub_lst
+
+    p_binomial = binom_test(valid_task_correct, valid_task_count, alternative='greater')
+    print('p value of the hypothesis test is {:.3f}'.format(p_binomial))
 
     return
 
