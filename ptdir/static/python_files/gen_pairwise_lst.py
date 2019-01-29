@@ -220,6 +220,7 @@ def gen_modifae_new_pair():
 
         trait_abr = trait.split('_')[0]
         pair_levels = ['low-mid', 'mid-high', 'low-high']
+        # pair_levels = ['low-high']
 
         for pair_level in pair_levels:
 
@@ -253,7 +254,7 @@ def gen_modifae_new_pair():
                 gt_im1_lst = [gt_img_dir + trait_abr + '-low-' + str(i) + '.png' for i in range(0, n_gt_num)]
                 gt_im2_lst = [gt_img_dir + trait_abr + '-mid-' + str(i) + '.png' for i in range(0, n_gt_num)]
             elif pair_level == 'low-high':
-                im1_post_fix, im2_post_fix = low_post_fix, mid_post_fix
+                im1_post_fix, im2_post_fix = low_post_fix, high_post_fix
                 gt_im1_lst = [gt_img_dir + trait_abr + '-low-' + str(i) + '.png' for i in range(0, n_gt_num)]
                 gt_im2_lst = [gt_img_dir + trait_abr + '-high-' + str(i) + '.png' for i in range(0, n_gt_num)]
             else:
