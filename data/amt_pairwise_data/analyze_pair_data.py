@@ -674,12 +674,12 @@ def comp_modifae_new():
     return
 
 
-def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
+def comp_modifae_new_with_correct_data_format(high_low_type='mid-high'):
 
     task_type = 'modifae'
-    trait_name = 'aggressive_new'
+    trait_name = 'attractive_new'
     standard_trial_num = 100
-    gt_acc_threshold = 0.50
+    gt_acc_threshold = 0.60
 
     print('trait = {}, type = {}, gt threshold = {}'.format(trait_name, high_low_type, gt_acc_threshold))
 
@@ -733,7 +733,8 @@ def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
     task_acc = valid_task_correct / valid_task_count
     gt_acc = valid_gt_correct / valid_gt_count
 
-    print('cur trait = {}, task acc = {}, gt acc = {}, total valid task trials = {}'.format(trait_name, task_acc, gt_acc, valid_task_count))
+    print('cur trait = {}, task acc = {}, gt acc = {}, total valid task trials = {}, gc threshold={}'.format(
+        trait_name, task_acc, gt_acc, valid_task_count, gt_acc_threshold))
     print 'bad subject ind', bad_sub_lst
 
     return
