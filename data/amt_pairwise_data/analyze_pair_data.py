@@ -675,10 +675,10 @@ def comp_modifae_new():
     return
 
 
-def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
+def comp_modifae_new_with_correct_data_format(high_low_type='mid-high'):
 
     task_type = 'modifae'
-    trait_name = 'trustworthy_new'
+    trait_name = 'intelligent_new'
     standard_trial_num = 100
     gt_acc_threshold = 0.60
 
