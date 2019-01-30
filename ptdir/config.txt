@@ -1,5 +1,5 @@
 [HIT Configuration]
-title = Face Attractive Pair Study (M-N-L-H)
+title = Face Attractive Pair Study (M-N-L-H-R)
 description = Evaluate facial impression
 amt_keywords = Perception, Psychology
 lifetime = 1

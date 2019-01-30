@@ -678,7 +678,7 @@ def comp_modifae_new():
 def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
 
     task_type = 'modifae'
-    trait_name = 'aggressive_new'
+    trait_name = 'attractive_new'
     standard_trial_num = 100
     gt_acc_threshold = 0.60
 
