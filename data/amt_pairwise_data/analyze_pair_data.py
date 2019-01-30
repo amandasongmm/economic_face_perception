@@ -675,7 +675,7 @@ def comp_modifae_new():
     return
 
 
-def comp_modifae_new_with_correct_data_format(high_low_type='mid-high'):
+def comp_modifae_new_with_correct_data_format(high_low_type='low-mid'):
 
     task_type = 'modifae'
     trait_name = 'trustworthy_new'
