@@ -14,8 +14,8 @@ def comp_modifae_new_with_correct_data_format(high_low_type='low-high'):
 
     print('trait = {}, type = {}, gt threshold = {}'.format(trait_name, high_low_type, gt_acc_threshold))
 
-    #pair_data_csv = './' + task_type + '/' + trait_name + '-' + high_low_type + '/pair_data.csv'
-    pair_data_csv = 'pair_data.csv'
+    pair_data_csv = './' + task_type + '/' + trait_name + '-' + high_low_type + '/pair_data.csv'
+#     pair_data_csv = 'pair_data.csv'
     pair_data = pd.read_csv(pair_data_csv, index_col=None)
 
     # convert subId to subNum
