@@ -6,13 +6,22 @@ from scipy.stats import binom_test
 
 
 def comp_stargan(trait_lst):
+    print_sub_data = False
+
     task_type = 'stargan'
+
+    print(task_type)
+
     high_low_type = 'low-high'
 
     standard_trial_num = 100
+    gt_acc_threshold = 0.5
+
 
     for trait_name in trait_lst:
-        print('==============\n{}'.format(trait_name))
+        valid_sub_num = 0
+        print('\n=============={}'.format(trait_name))
+
         pair_data_csv = './' + task_type + '/' + trait_name + '-' + high_low_type + '/pair_data.csv'
         pair_data = pd.read_csv(pair_data_csv, index_col=None)
 
@@ -25,23 +34,20 @@ def comp_stargan(trait_lst):
                 sub_counter += 1
         pair_data['subNum'] = pair_data['subId'].map(sub_num_dict)
 
-        correct_count = 0
-        correct_total = 0
-
-        gt_count = 0
-        gt_total = 0
-
-        task_count = 0
-        task_total = 0
+        correct_count, correct_total = 0, 0
+        gt_count, gt_total = 0, 0
+        task_count, task_total = 0, 0
 
         # compute accuracy by subject.
         total_sub_num = pair_data['subNum'].nunique()
         above_chance_sub_num = 0
         above_chance_sub_lst = []
+
         for cur_sub_num in range(1, total_sub_num+1):
 
             cur_sub_data = pair_data[pair_data['subNum'] == cur_sub_num]
             cur_sub_total = len(cur_sub_data)
+
             cur_sub_correct_count = 0
 
             cur_sub_task_correct = 0
@@ -53,10 +59,10 @@ def comp_stargan(trait_lst):
             for ind, row in cur_sub_data.iterrows():
                 im1, im2 = os.path.basename(row['im1']), os.path.basename(row['im2'])
 
-                # test if the index matches. Test passed.
-                im1_ind, im2_ind = re.findall(r'\d+', im1)[0], re.findall(r'\d+', im2)[0]
-                if im1_ind != im2_ind:
-                    print im1_ind, im2_ind
+                # # test if the index matches. Test passed.
+                # im1_ind, im2_ind = re.findall(r'\d+', im1)[0], re.findall(r'\d+', im2)[0]
+                # if im1_ind != im2_ind:
+                #     print im1_ind, im2_ind
 
                 # next, test if the low_first is correct.
                 if im1[:4] == 'star':
@@ -73,9 +79,11 @@ def comp_stargan(trait_lst):
 
                     if row['response'] == response_should_be:
                         cur_sub_task_correct += 1
+
                 else:
                     cur_sub_gt_total += 1
                     low_status = im1.split('-')[1]
+
                     if low_status == 'low':
                         response_should_be = 'right'
                     else:
@@ -87,7 +95,7 @@ def comp_stargan(trait_lst):
                 if row['response'] == response_should_be:
                     cur_sub_correct_count += 1
 
-            sub_acc = cur_sub_correct_count / cur_sub_total
+            # sub_acc = cur_sub_correct_count / cur_sub_total
             sub_task_acc = cur_sub_task_correct / cur_sub_task_total
 
             p_binomial = binom_test(cur_sub_task_correct, cur_sub_task_total, alternative='greater')
@@ -97,14 +105,17 @@ def comp_stargan(trait_lst):
             else:
                 sub_gt_acc = cur_sub_gt_correct / cur_sub_gt_total
 
-            print('cur sub = {}, task acc = {:.2f}, task p = {:.2f}, gt acc={:.2f}. task trials = {}, gt trials = {}'.format(
-                cur_sub_num, sub_task_acc, p_binomial, sub_gt_acc, cur_sub_task_total, cur_sub_gt_total))
+            if print_sub_data:
+                print('cur sub = {}, task acc = {:.2f}, task p = {:.2f}, gt acc={:.2f}. '
+                      'task trials = {}, gt trials = {}'.format(
+                    cur_sub_num, sub_task_acc, p_binomial, sub_gt_acc, cur_sub_task_total, cur_sub_gt_total))
 
             if p_binomial < 0.05:
                 above_chance_sub_lst.append(cur_sub_num)
                 above_chance_sub_num += 1
 
-            if cur_sub_total == standard_trial_num:
+            if cur_sub_total == standard_trial_num and sub_gt_acc > gt_acc_threshold:
+                valid_sub_num += 1
                 correct_count += cur_sub_correct_count
                 correct_total += standard_trial_num
 
@@ -116,13 +127,18 @@ def comp_stargan(trait_lst):
 
         acc = correct_count / correct_total
         task_acc = task_count / task_total
-        gt_acc = gt_count / gt_total
-        p_binomial_cur_trait = binom_test(task_count, task_total, alternative='greater')
-        p_binomial_gt = binom_test(gt_count, gt_total, alternative='greater')
 
-        print('cur trait: {}, task acc = {:.2f}, p = {:.2f}, gt acc = {:.2f}, p = {:.2f}. '
+        gt_acc = gt_count / gt_total
+        p_binomial_cur_trait = binom_test(task_count, task_total)
+        p_binomial_gt = binom_test(gt_count, gt_total)
+
+        # p_binomial_cur_trait = binom_test(task_count, task_total, alternative='greater')
+        # p_binomial_gt = binom_test(gt_count, gt_total, alternative='greater')
+
+        print('cur trait: {}, task acc = {:.2f}, p = {:.4f}, gt acc = {:.2f}, p = {:.4f}. '
               '{} out of {} above chance.'.format(
             trait_name, task_acc, p_binomial_cur_trait, gt_acc, p_binomial_gt, above_chance_sub_num, total_sub_num))
+        print('total valid sub num = {}'.format(valid_sub_num))
 
         #
         # print('p value for {} task is {:.2f}. p for ground truth pairs is {:.2f}. p < 0.05 means above chance.'.format(
@@ -230,9 +246,9 @@ def comp_modifae_old_data(high_low_type_lst, trait_lst):
                 if p_binomial < 0.05:
                     above_chance_sub_num += 1
 
-                # print('cur sub = {}, task acc = {:.2f}, task p = {:.2f}, gt acc={:.2f}, gt p = {:.2f}. '
-                #       'task trials = {}, gt trials = {}'.format(cur_sub_num, sub_task_acc, p_binomial,
-                #                                                 sub_gt_acc, p_gt_bi, cur_sub_task_total, cur_sub_gt_total))
+                print('cur sub = {}, task acc = {:.2f}, task p = {:.2f}, gt acc={:.2f}, gt p = {:.2f}. '
+                      'task trials = {}, gt trials = {}'.format(cur_sub_num, sub_task_acc, p_binomial,
+                                                                sub_gt_acc, p_gt_bi, cur_sub_task_total, cur_sub_gt_total))
 
                 if cur_sub_total == standard_trial_num and sub_gt_acc > gc_acc_threshold:
                     correct_count += cur_sub_correct_count
@@ -731,7 +747,7 @@ comp_stargan(['aggressive', 'attractive', 'trustworthy', 'intelligent'])
 
 
 # high_low_type_lst = ['low-mid', 'mid-high', 'low-high']
-#
+# #
 # comp_modifae_old_data(high_low_type_lst=high_low_type_lst,
 #                       trait_lst=['aggressive', 'attractive', 'trustworthy', 'intelligent'])
 
