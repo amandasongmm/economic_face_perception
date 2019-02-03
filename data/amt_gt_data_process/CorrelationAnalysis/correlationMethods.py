@@ -10,7 +10,8 @@ from sklearn import preprocessing
 celeb = pd.read_csv("celeb_ratings.csv")
 
 def calcSelfConsistency(trait, prnt=False):
-    print("Consistency with self")
+    if prnt:
+        print("Consistency with self")
     corrList = []
     df = pd.read_csv("../" + trait + "/likert_data.csv")
     for sub in sorted(df.subId.unique()):
@@ -31,19 +32,22 @@ def calcSelfConsistency(trait, prnt=False):
             print("\t p-val: ", c[1])
         # Show the hist
     return corrList
-def calcGroupConsistency(df):
-    print("Consistency with group")
+def calcGroupConsistency(trait, prnt=False):
+    if prnt:
+        print("Consistency with group")
     corrList = []
+    df = pd.read_csv(f"../{trait}/likert_data.csv")
     df2 = pd.pivot_table(df, index="subId", columns="imgName", values="rating")
     for sub in df2.index:
         subData = df2.loc[sub]
         groupdf =  df2.drop(sub, axis=0)
         groupData = groupdf.mean(axis=0)
-        print("SubId: " + sub)
         c = corr(subData, groupData)
-        print("\t Pearson Cor: ", c[0])
         corrList.append(c[0])
-        print("\t p-val: ", c[1])
+        if prnt:  
+            print("SubId: " + sub)
+            print("\t Pearson Cor: ", c[0])
+            print("\t p-val: ", c[1])
     return corrList
 
 def calcrHumrMacConsistency(df, attribute):
